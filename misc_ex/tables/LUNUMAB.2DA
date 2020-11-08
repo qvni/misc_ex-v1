@@ -1,0 +1,34 @@
+2DA V1.0
+0
+                        FIRST_LEVEL     RATE      CHANGE_LEVEL   NEW_RATE
+MAGE                    18              1         99             1
+FIGHTER                 5              1         99             1
+CLERIC                  22              1         99             1
+THIEF                   5              1         99             1
+BARD                    24              1         99             1
+PALADIN                 5              1         99             1
+DRUID                   15              1         99             1
+RANGER                  5              1         99             1
+FIGHTER_MAGE            9              1         99             1
+FIGHTER_CLERIC          9              1         99             1
+FIGHTER_THIEF           9              1         99             1
+FIGHTER_MAGE_THIEF      12              1         99             1
+MAGE_THIEF              9              1         99             1
+CLERIC_MAGE             20              1         99             1
+CLERIC_THIEF            9              1         99             1
+FIGHTER_DRUID           9              1         99             1
+FIGHTER_MAGE_CLERIC     9              1         99             1
+CLERIC_RANGER           9              1         99             1
+SORCERER                18              1         99             1
+MONK                    5              1         99             1
+MULTI2FIGHTER           9              1         99             1
+MULTI2MAGE              9              1         99             1
+MULTI2CLERIC            9              1         99             1
+MULTI2RANGER            9              1         99             1
+MULTI2DRUID             9              1         99             1
+MULTI2THIEF             9              1         99             1
+MULTI3FIGHTER           12              1         99             1
+MULTI3MAGE              12              1         99             1
+MULTI3THIEF             12              1         99             1
+MULTI3CLERIC            12              1         99             1
+SHAMAN                  18              1         99             1

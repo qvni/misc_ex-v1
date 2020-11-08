@@ -1,0 +1,4 @@
+C:SetGlobal("DMWWDisintegratePlayer","GLOBAL",1)
+C:SetGlobal("DMWWImprisonPlayer","GLOBAL",1)
+C:SetGlobal("DMWWPetrifyPlayer","GLOBAL",1)
+C:SetGlobal("DMWWTimestopMeleeAlways","GLOBAL",1)

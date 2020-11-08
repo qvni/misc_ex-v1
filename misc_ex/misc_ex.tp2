@@ -1,0 +1,3461 @@
+BACKUP ~backup/misc_ex~
+SUPPORT ~Discords, G3(Gibberlings3 Official): https://discord.gg/yTzjMTb or Infinity Engine: https://discord.gg/0rvJmMgIV5FHQTWT @auiwqi~
+VERSION ~1~
+README ~misc_ex/misc_ex-readme.txt~
+
+ALWAYS
+	ACTION_IF !VARIABLE_IS_SET ~misc_ex_initialise~ BEGIN
+		INCLUDE ~misc_ex/lib/always.tph~
+		OUTER_SET misc_ex_initialise=1
+	END
+END
+
+LANGUAGE ~English~
+	~en_US~
+	~misc_ex/lang/en_US/prompts.tra~
+
+
+BEGIN ~Wizard Spells~
+DESIGNATED 0
+REQUIRE_PREDICATE !(MOD_IS_INSTALLED ~misc_ex/misc_ex.tp2~ ~7~) ~Install before misc_ex #7 HLA Table~
+
+/////////////////////////////////////////
+///////////////////////////////BEGIN WIZARD SPELLS
+/////////////////////////////////////////
+
+COPY ~misc_ex/newspellwi/EFF_M41.WAV~ ~override~ ~misc_ex/newspellwi/SPSPARKS.BAM~ ~override~ ~misc_ex/newspellwi/FPIT1S.BAM~ ~override~ ~misc_ex/newspellwi/SPCCWOUL.BAM~ ~override~
+
+ADD_PROJECTILE ~misc_ex/newspellwi/Y5WI103.pro~ // new burning hands spell
+COPY_EXISTING ~Y5WI103.PRO~ ~override~
+WRITE_SHORT 0xa 10
+WRITE_LONG 	0x2c (THIS BOR (BIT1 + BIT8))
+
+WRITE_SHORT 0x200 (THIS BOR BIT11)
+WRITE_SHORT 0x204 90
+WRITE_SHORT 0x206 90
+WRITE_ASCII 0x208 ~EFF_M41~ #8
+WRITE_SHORT 0x210 17
+WRITE_SHORT 0x212 1
+WRITE_BYTE 0x216 1
+WRITE_BYTE 0x217 254
+WRITE_SHORT 0x21a 79
+WRITE_SHORT 0x224 90
+WRITE_ASCII 0x228 ~FPIT1S~ #8
+WRITE_ASCII 0x230 ~FPIT1S~ #8
+WRITE_LONG 0x240 (THIS BOR (BIT2 + BIT13))
+WRITE_SHORT 0x248 1
+WRITE_SHORT 0x24a 2
+
+
+COPY_EXISTING ~SPWI103.SPL~ ~override~
+SAY UNIDENTIFIED_DESC ~Burning Hands
+(Alteration)
+
+Level: 1
+Range: 0
+Duration: Instant
+Casting Time: 1
+Area of Effect: The caster
+Saving Throw: 1/2
+
+When the wizard casts this spell, a jet of searing flame shoots from <PRO_HISHER> fingertips. The wizard's hands must be held so as to send forth a fanlike sheet of flames: <PRO_HISHER> thumbs must touch each other and the fingers must be spread. The burning hands send out flame jets of 5 ft. length in a horizontal arc of about 120 degrees in front of the wizard. Any creature in the area of the flames suffers 1d5 points of damage, +2 points for each level of the caster, to a maximum of 1d5+20 points of fire damage.~
+
+
+LPF ALTER_SPELL_HEADER INT_VAR target = 4 range = 5 projectile = "%Y5WI103%" END
+LPF DELETE_EFFECT INT_VAR check_globals = 0 match_opcode = 165 END
+LPF ALTER_EFFECT INT_VAR check_globals = 0 match_opcode = 12 dicesize = 5 END
+
+
+ADD_PROJECTILE ~misc_ex/newspellwi/Y5WI115.pro~ // new shocking grasp spell
+COPY_EXISTING ~Y5WI115.PRO~ ~override~
+WRITE_SHORT 0xa 10
+WRITE_LONG 0xc (THIS BOR BIT1)
+//WRITE_LONG 	0x2c (THIS BOR (BIT1 + BIT6 + BIT17 + BIT22))
+
+//WRITE_SHORT 0x200 (THIS BOR BIT11)
+WRITE_SHORT 0x204 64
+WRITE_SHORT 0x206 64
+WRITE_ASCII 0x208 ~EFF_M41~ #8
+WRITE_SHORT 0x210 10
+WRITE_SHORT 0x212 1
+WRITE_BYTE 0x216 1
+WRITE_BYTE 0x217 254
+WRITE_SHORT 0x21a 79
+//WRITE_SHORT 0x224 90
+//WRITE_ASCII 0x21c ~FPIT1S~ #8
+WRITE_ASCII 0x228 ~SPSPARKS~ #8
+WRITE_LONG 0x240 (THIS BOR (BIT2 + BIT4 + BIT13))
+WRITE_SHORT 0x248 1
+WRITE_SHORT 0x24a 4
+
+COPY_EXISTING ~SPWI103.SPL~ ~override/SPWI115.SPL~
+WRITE_ASCII 0x10 ~CAS_M08~ #8
+WRITE_ASCII 0x3a ~SPWI115C~ #8
+
+SAY NAME1 ~Shocking Grasp~
+SAY UNIDENTIFIED_DESC ~Shocking Grasp
+(Alteration)
+
+Level: 1
+Range: 5
+Duration: Instant
+Casting Time: 1
+Area of Effect: 4-ft. radius.
+Saving Throw: 1/2 and neg hold.
+
+When creatures are hit by this spell, an electrical charge will deal 1d8 damage plus 1 per level of the caster, for a maximum of 1d8+10. In addition, creatures inside of the area of effect must make a Save vs. Refleax or be temporarily held in place for 1 second, as jolts of lightning lock their limbs..~
+
+
+LPF ALTER_SPELL_HEADER INT_VAR target = 4 range = 5 projectile = "%Y5WI115%" STR_VAR icon = "SPWI115B" END
+LPF DELETE_EFFECT INT_VAR check_globals = 0 match_opcode = 177 END
+LPF CLONE_EFFECT INT_VAR check_globals = 0 match_opcode = 12  opcode = 321 paramater1 = 0 parameter2 = 0 timing = 0 resist_dispel = 2 savingthrow = 0 dicenum = 0 dicesize = 0 special = 0 STR_VAR insert = first resource = "SPWI115" END
+LPF CLONE_EFFECT INT_VAR check_globals = 0 match_opcode = 12  opcode = 154 parameter1 = 0 parameter2 = 0 timing = 0 duration = 1 savingthrow = 2 dicenum = 0 dicesize = 0 special = 0 STR_VAR insert = below END
+LPF CLONE_EFFECT INT_VAR check_globals = 0 match_opcode = 12  opcode = 126 parameter1 = 0 parameter2 = 0 timing = 0 duration = 2 savingthrow = 2 dicenum = 0 dicesize = 0 special = 0 STR_VAR insert = below END
+LPF ALTER_EFFECT INT_VAR check_globals = 0 match_opcode = 12 savingthrow = 2 dicesize = 8 END
+LPF ALTER_EFFECT INT_VAR check_globals = 0 match_opcode = 12 match_parameter1 = 2 parameter1 = 1 END
+LPF ALTER_EFFECT INT_VAR check_globals = 0 match_opcode = 12 match_parameter1 = 4 parameter1 = 2 END
+LPF ALTER_EFFECT INT_VAR check_globals = 0 match_opcode = 12 match_parameter1 = 6 parameter1 = 3 END
+LPF ALTER_EFFECT INT_VAR check_globals = 0 match_opcode = 12 match_parameter1 = 8 parameter1 = 4 END
+LPF ALTER_EFFECT INT_VAR check_globals = 0 match_opcode = 12 match_parameter1 = 10 parameter1 = 5 END
+LPF ALTER_EFFECT INT_VAR check_globals = 0 match_opcode = 12 match_parameter1 = 12 parameter1 = 6 END
+LPF ALTER_EFFECT INT_VAR check_globals = 0 match_opcode = 12 match_parameter1 = 14 parameter1 = 7 END
+LPF ALTER_EFFECT INT_VAR check_globals = 0 match_opcode = 12 match_parameter1 = 16 parameter1 = 8 END
+LPF ALTER_EFFECT INT_VAR check_globals = 0 match_opcode = 12 match_parameter1 = 18 parameter1 = 9 END
+LPF ALTER_EFFECT INT_VAR check_globals = 0 match_opcode = 12 match_parameter1 = 20 parameter1 = 10 END
+
+READ_LONG 0x64 abil_off
+READ_SHORT 0x68 abil_num
+READ_LONG 0x6a effect_off
+FOR	(i = 0; i < abil_num; ++i)	BEGIN
+	READ_SHORT (abil_off+i*0x28+0x1e) spell_num
+	READ_SHORT (abil_off+i*0x28+0x20) spell_index
+	FOR	(j = 0; j < spell_num; j+=1)	BEGIN
+		READ_SHORT ((effect_off+(j+spell_index)*0x30)) opcode
+		READ_SHORT ((effect_off+(j+spell_index)*0x30)+0xa) damagetype
+		PATCH_IF (opcode = 12) BEGIN
+			WRITE_SHORT ((effect_off+(j+spell_index)*0x30)+0xa) 4
+		END
+	END
+END
+
+ADD_PROJECTILE ~misc_ex/newspellwi/Y5WI117.pro~ // new chill touch spell
+COPY_EXISTING ~Y5WI117.PRO~ ~override~
+WRITE_SHORT 0xa 40
+//WRITE_LONG 	0x2c (THIS BOR (BIT1 + BIT6 + BIT17 + BIT22))
+
+WRITE_SHORT 0x200 (THIS BOR BIT11)
+WRITE_SHORT 0x204 90
+WRITE_SHORT 0x206 90
+WRITE_ASCII 0x208 ~EFF_M41~ #8
+WRITE_SHORT 0x210 15
+WRITE_SHORT 0x212 1
+WRITE_BYTE 0x216 1
+WRITE_BYTE 0x217 254
+WRITE_SHORT 0x21a 79
+WRITE_SHORT 0x224 90
+WRITE_ASCII 0x228 ~SPCCWOUI~ #8
+WRITE_LONG 0x240 (THIS BOR (BIT13 + BIT14))
+WRITE_SHORT 0x248 10
+WRITE_SHORT 0x24a 5
+
+COPY_EXISTING ~SPWI103.SPL~ ~override/SPWI117.SPL~
+WRITE_ASCII 0x10 ~CAS_MO7~ #8
+WRITE_SHORT 0x22 9
+WRITE_BYTE 0x25 7
+WRITE_ASCII 0x3a ~SPWI117C~ #8
+
+SAY NAME1 ~Chill Touch~
+SAY UNIDENTIFIED_DESC ~Chill Touch
+(Necromancy)
+
+Level: 1
+Range: 0
+Duration: Instant
+Casting Time: 1
+Area of Effect: The caster.
+Saving Throw: None.
+
+When the caster completes this spell, a blue glow encompasses <PRO_HISHER> hands. This energy attacks the life force of any creature within the vicinity(Creatures immune to cold damage are unaffected by this spell.) Cold air pierces through victums in a 5 ft. length in a horizontal arc of about 120 degrees in front of the wizard. Any creature in the area of the cold suffers 1d4 points of damage, +1 points for each level of the caster, to a maximum of 1d4+10 points of cold damage, in addition to being slowed for 2 seconds. Those successfully saving vs. Spell avoid being slowed.~
+
+WRITE_BYTE 0x27 10
+
+LPF ALTER_SPELL_HEADER INT_VAR target = 4 range = 5 projectile = "%Y5WI117%" STR_VAR icon = "SPWI117B" END
+LPF DELETE_EFFECT INT_VAR check_globals = 0 match_opcode = 177 END
+LPF CLONE_EFFECT INT_VAR check_globals = 0 match_opcode = 12  opcode = 321 paramater1 = 0 parameter2 = 0 timing = 0 resist_dispel = 2 savingthrow = 0 dicenum = 0 dicesize = 0 special = 0 STR_VAR insert = first resource = "SPWI117" END
+LPF CLONE_EFFECT INT_VAR check_globals = 0 match_opcode = 12  opcode = 126 parameter1 = 50 parameter2 = 2 timing = 0 duration = 2 savingthrow = 0 dicenum = 0 dicesize = 0 special = 0 STR_VAR insert = below END
+LPF ALTER_EFFECT INT_VAR check_globals = 0 match_opcode = 12 savingthrow = 0 dicesize = 4 special = 0 END
+LPF ALTER_EFFECT INT_VAR check_globals = 0 match_opcode = 12 match_parameter1 = 2 parameter1 = 1 END
+LPF ALTER_EFFECT INT_VAR check_globals = 0 match_opcode = 12 match_parameter1 = 4 parameter1 = 2 END
+LPF ALTER_EFFECT INT_VAR check_globals = 0 match_opcode = 12 match_parameter1 = 6 parameter1 = 3 END
+LPF ALTER_EFFECT INT_VAR check_globals = 0 match_opcode = 12 match_parameter1 = 8 parameter1 = 4 END
+LPF ALTER_EFFECT INT_VAR check_globals = 0 match_opcode = 12 match_parameter1 = 10 parameter1 = 5 END
+LPF ALTER_EFFECT INT_VAR check_globals = 0 match_opcode = 12 match_parameter1 = 12 parameter1 = 6 END
+LPF ALTER_EFFECT INT_VAR check_globals = 0 match_opcode = 12 match_parameter1 = 14 parameter1 = 7 END
+LPF ALTER_EFFECT INT_VAR check_globals = 0 match_opcode = 12 match_parameter1 = 16 parameter1 = 8 END
+LPF ALTER_EFFECT INT_VAR check_globals = 0 match_opcode = 12 match_parameter1 = 18 parameter1 = 9 END
+LPF ALTER_EFFECT INT_VAR check_globals = 0 match_opcode = 12 match_parameter1 = 20 parameter1 = 10 END
+
+READ_LONG 0x64 abil_off
+READ_SHORT 0x68 abil_num
+READ_LONG 0x6a effect_off
+FOR	(i = 0; i < abil_num; ++i)	BEGIN
+	READ_SHORT (abil_off+i*0x28+0x1e) spell_num
+	READ_SHORT (abil_off+i*0x28+0x20) spell_index
+	FOR	(j = 0; j < spell_num; j+=1)	BEGIN
+		READ_SHORT ((effect_off+(j+spell_index)*0x30)) opcode
+		READ_SHORT ((effect_off+(j+spell_index)*0x30)+0xa) damagetype
+		PATCH_IF (opcode = 12) BEGIN
+			WRITE_SHORT ((effect_off+(j+spell_index)*0x30)+0xa) 2
+		END
+	END
+END
+
+COPY ~misc_ex/spwi/spwi206.spl~ ~override~
+	SAY NAME1 ~Invisibility~
+	
+	SAY UNIDENTIFIED_DESC ~Invisibility 
+(Illusion/Phantasm)
+
+Level: 2
+Range: Touch 
+Duration: Lv1-8: 1 turn. Lv9-14: 2 turns. Lv 15: 2 turns + 5 rounds.
+Casting Time: 2 
+Area of Effect: 1 creature 
+Saving Throw: None 
+
+This spell causes the creature touched to vanish from sight and be undetectable by normal vision or even infravision. Of course, the invisible creature is not magically silenced, and certain other conditions can render the creature detectable. Even allies cannot see the invisible creature or its gear, unless these allies can normally see invisible things or employ magic to do so. Items dropped or put down by the invisible creature become visible; items picked up disappear if tucked into the clothing or pouches worn by the creature. The spell remains in effect until it is magically broken or dispelled, until the recipient attacks any creature. The caster cannot perform any actions that manipulate the environment around <PRO_HIMHER>, such as opening doors, disarming a trap, or opening a chest. The caster can, however, cast defensive spells on <PRO_HIMHER>self and fellow party members. And if <PRO_HESHE> attacks, <PRO_HESHE> immediately becomes visible, although the invisibility enables <PRO_HIMHER> to attack first.~
+
+COPY_EXISTING ~spwi209.spl~ ~override~
+ SAY 0x50 ~Luck
+(Enchantment/Charm)
+
+Level: 2
+Range: 15 ft.
+Duration: 1 turn
+Casting Time: 2
+Area of Effect: 1 creature
+Saving Throw: None
+
+The recipient of this spell gains extraordinary luck for the next turn, receiving a +1 bonus to <PRO_HISHER> attack rolls, and minimum damage/healing rolls as well as +10% to all thieving skills. Furthermore, damage dice for all effects outside a weapon's base damage are reduced by 1. For example, a 6d6 fireball will do 6d5 damage, and a flaming long sword that deals 1d8+2 slashing plus 1d3 fire damage will deal 1d8+2 slashing plus 2 fire damage instead.~
+READ_LONG 0x64 "ability_offset"
+READ_SHORT 0x68 "ability_count"
+READ_LONG 0x6a "effect_offset"
+FOR (i = 0; i < ability_count; ++i) BEGIN
+	READ_SHORT (ability_offset+i*0x28+0x1e) ability_effect_count
+	READ_SHORT (ability_offset+i*0x28+0x20) ability_effect_index
+	FOR (j=0;j<ability_effect_count;j+=1) BEGIN
+		READ_LONG ((effect_offset+(j+ability_effect_index)*0x30)+0x04) param1
+		PATCH_IF (param1 = 5) BEGIN
+			WRITE_LONG ((effect_offset+(j+ability_effect_index)*0x30)+0x04) 10
+		END
+	READ_SHORT ((effect_offset+(j+ability_effect_index)*0x30)+0x0e) duration
+	PATCH_IF (duration > 1) BEGIN
+		WRITE_LONG ((effect_offset+(j+ability_effect_index)*0x30)+0x0e) 60
+		END
+	END
+END
+
+COPY_EXISTING ~SPWI217.SPL~ ~override~
+SAY UNIDENTIFIED_DESC ~Agannazar's Scorcher
+(Evocation)
+
+Level: 2
+Range: 15 ft.
+Duration: 1 round
+Casting Time: 5
+Area of Effect: 2-ft. by 15-ft. jet
+Saving Throw: None
+
+Upon casting this spell, a jet of flame appears at the caster's fingertips and bursts out toward one target of the caster's choice. That target will be hit by this flame for 3d6 points of damage. The flame jet strikes a second time halfway through its duration, and the caster may move while the spell is in effect. There is no Saving Throw against this spell, though anti-fire capabilities such as Fire Resistance will apply and may reduce or eliminate the damage.~
+
+LPF ALTER_SPELL_HEADER INT_VAR header_type = 1 speed = 4 END
+LPF DELETE_SPELL_EFFECT INT_VAR opcode_to_delete = 165 END
+
+COPY_EXISTING ~spin940.spl~ ~override~ ~spwi004.spl~ ~override~ ~spwi213.spl~ ~override~ ~spwm187.spl~ ~override~
+
+SAY NAME1 ~Noxious Cloud~
+SAY UNIDENTIFIED_DESC ~Noxious Cloud
+(Evocation)
+
+Level: 2
+Range: 90 ft.
+Duration: 1 turn
+Casting Time: 2
+Area of Effect: 15-ft. radius
+Saving Throw: Neg.
+
+When casting a Noxious Cloud spell, the wizard creates a billowing mass of nauseous vapors up to 90 ft. away from <PRO_HISHER> position. Any creature caught within the cloud must roll a successful Saving Throw vs. Poison or be sent reeling and fall down for 1d2 rounds. Those who make successful Saving Throws can leave the cloud without suffering any ill effects, although those remaining in the cloud must continue to save each round. A Dispel Magic will remove the nausea on a particular character, but if they remain in the cloud, then they are still subject to its effects.~
+
+LPF ALTER_SPELL_EFFECT INT_VAR savebonus = 0 END
+
+COPY_EXISTING ~SCRL97.ITM~ ~override~
+SAY NAME1 ~Scroll~
+SAY NAME2 ~Noxious Cloud~
+SAY IDENTIFIED_DESC ~Noxious Cloud
+(Evocation)
+
+Level: 2
+Range: 90 ft.
+Duration: 1 turn
+Casting Time: 2
+Area of Effect: 15-ft. radius
+Saving Throw: Neg.
+
+When casting a Noxious Cloud spell, the wizard creates a billowing mass of nauseous vapors up to 90 ft. away from <PRO_HISHER> position. Any creature caught within the cloud must roll a successful Saving Throw vs. Death or be sent reeling and fall down for 1d2 rounds. Those who make successful Saving Throws can leave the cloud without suffering any ill effects, although those remaining in the cloud must continue to save each round. A Dispel Magic will remove the nausea on a particular character, but if they remain in the cloud, then they are still subject to its effects.~
+
+ACTION_IF FILE_EXISTS_IN_GAME ~__000S.ITM~ BEGIN
+	COPY_EXISTING ~__000S.ITM~ ~override~
+	SAY NAME2 ~Noxious Cloud Trap~
+	SAY IDENTIFIED_DESC ~This trap contains the necessary materials to launch a Noxious Cloudd spell when triggered by an enemy creature within 4ft.
+	
+	Noxious Cloud
+	(Evocation)
+	
+	Level: 2
+	Range: 90 ft.
+	Duration: 1 turn
+	Area of Effect: 15-ft. radius
+	Saving Throw: Neg.
+	
+	When casting a Noxious Cloud spell, the wizard creates a billowing mass of nauseous vapors up to 90 ft. away from <PRO_HISHER> position. Any creature caught within the cloud must roll a successful Saving Throw vs. Death or be sent reeling and fall down for 1d2 rounds. Those who make successful Saving Throws can leave the cloud without suffering any ill effects, although those remaining in the cloud must continue to save each round. A Dispel Magic will remove the nausea on a particular character, but if they remain in the cloud, then they are still subject to its effects.~
+END
+  
+COPY_EXISTING ~spwi305.spl~ ~override~ // nerfs haste to only give 150% boost instead of 200%
+SAY UNIDENTIFIED_DESC ~Haste
+(Alteration)
+
+Level: 3
+Range: 15 ft.
+Duration: 3 rounds + 1 round/level
+Casting Time: 3
+Area of Effect: 15-ft. radius
+Saving Throw: None
+
+When this spell is cast, all creatures affected function at 150% their normal movement rate, gain a -2 initiative bonus, and receive an extra attack per round. Thus, a creature moving at 10 and attacking once per round would move at 15 and attack twice per round. At the instant the spell is completed, it affects all allied creatures in a 15-ft. radius centered on a point selected by the caster (thus, creatures leaving the area are still subject to the spell's effect; those entering the area after the casting is completed are not). This spell is not cumulative with itself or with other similar magic. Spellcasting and spell effects are not affected. Note that this spell negates the effects of a Slow spell.~
+
+LPF CLONE_EFFECT INT_VAR silent = 1 match_opcode = 16 match_target = 2 match_parameter1 = 0 match_resist_dispel = 3 opcode = 126 parameter1 = 75 parameter2 = 2 STR_VAR insert = below END
+
+COPY ~misc_ex/spwi/spwi307.spl~ ~override~
+	SAY NAME1 ~Invisibility, 10' Radius~
+	
+	SAY UNIDENTIFIED_DESC ~Invisibility, 10' Radius
+(Illusion/Phantasm)
+
+Level: 3
+Range: 0
+Duration: Lv1-8: 5 rounds. Lv9-14: 1 turn. Level 15: 1 turn, 5 rounds.
+Casting Time: 9
+Area of Effect: 10-ft. radius
+Saving Throw: None 
+
+This spell causes all creatures within 10 ft. of the caster to vanish from sight and be undetectable by normal vision or even infravision. Of course, the invisible creature(s) are not magically silenced, and certain other conditions can render the creature(s) detectable. Even allies cannot see the invisible creature(s) or their gear, unless these allies can normally see invisible things or employ magic to do so. Items dropped or put down by the invisible creature(s) become visible; items picked up disappear if tucked into the clothing or pouches worn by the creature(s). The spell remains in effect until it is magically broken or dispelled, until the wizard or recipient cancels it, or until the recipient attacks any creature. The invisible being(s) cannot open doors, talk, eat, climb stairs, etc. If they attack, they immediately become visible, although the invisibility enables them to attack first.~
+
+COPY_EXISTING ~SPWI308.SPL~ ~override~ // lightning bolt changed to target area from target
+LPF ALTER_SPELL_HEADER INT_VAR target = 4 END
+
+COPY_EXISTING ~SCRL1K.itm~ ~override~ // allows lightning scroll to target an area
+LPF ALTER_ITEM_HEADER INT_VAR header = 1 target = 4 END
+
+COPY_EXISTING ~MISC7N.itm~ ~override~ ~WAND07.itm~ ~override~ //lightning wand target fix
+LPF ALTER_ITEM_HEADER INT_VAR target = 4 END
+
+COPY_EXISTING ~misc_ex/spwi/spwi404.spl~ ~override~
+	SAY NAME1 ~Ice Storm~
+	
+	SAY UNIDENTIFIED_DESC ~Ice Storm
+Level: 4
+School: Evocation
+Range: Long
+Duration: 4 rounds
+Casting Time: 4
+Area of Effect: 30' radius
+Saving Throw: -4
+
+When this spell is cast, great magical hailstones pound down for 4 rounds within a 30 foot radius of a point selected by the caster. Creatures within the area of effect have their movement speed reduced by 50%(-4 save vs. spell), and receive 2d8 points of cold damage for each round they remain inside the storm.~
+
+LPF CLONE_EFFECT INT_VAR match_opcode = 12 opcode = 321 parameter2 = 0 timing = 0 dicenumber = 0 dicesize = 0 STR_VAR resource = "SPWI404" END
+
+LPF CLONE_EFFECT INT_VAR match_opcode = 12 opcode = 40 parameter2 = 0 timing = 0 duration = 7 dicenumber = 0 dicesize = 0 savingthrow = 2 STR_VAR insert = below END
+LPF CLONE_EFFECT INT_VAR match_opcode = 40 opcode = 278 parameter1 = 4 STR_VAR insert = below END
+LPF CLONE_EFFECT INT_VAR match_opcode = 40 opcode = 0 parameter1 = 4 STR_VAR insert = below END
+
+
+COPY ~misc_ex/spwi/spwi405.spl~ ~override~
+	SAY NAME1 ~Improved Invisibility~
+	SAY UNIDENTIFIED_DESC ~Improved Invisibility
+(Illusion/Phantasm)
+
+Level: 4
+Range: Touch
+Duration: Lv1+ 1 turn, Lv9+ 1t+2rounds, Lv15+ 1t+4r.
+Casting Time: 4
+Area of Effect: 1 creature
+Saving Throw: None
+
+This spell is similar to Invisibility, but the recipient is able to attack by missile discharge, melee combat, or spellcasting while remaining unseen. However, telltale traces—a shimmering—allow an observant opponent to attack the invisible spell recipient. These traces are only noticeable when specifically looked for (after the invisible character has made <PRO_HISHER> presence known). Attacks against the invisible character suffer a -4 penalty to attack rolls, and the invisible character's Saving Throws are made with a +4 bonus.
+
+Note: After making an attack, the wizard is no longer completely invisible. Opponents can target the wizard.~
+
+COPY ~misc_ex/spwi/spwi413c.eff~ ~override~
+COPY ~misc_ex/spwi/spwi413d.eff~ ~override~
+COPY ~misc_ex/spwi/spwi413d.spl~ ~override~
+COPY ~misc_ex/spwi/spwi413.spl~ ~override~
+	SAY NAME1 ~Otiluke's Resilient Sphere~
+	
+	SAY UNIDENTIFIED_DESC ~Otiluke's Resilient Sphere
+Level: 4
+School: Alteration
+Range: Long
+Duration: 1 turn
+Casting Time: 4
+Area of Effect: 1 creature
+Saving Throw: Spell negates
+
+When this spell is cast, the result is a globe of shimmering force that encloses the subject creature if it fails to successfully save vs. spell at a -3 penalty. The resilient sphere will contain its subject for the duration of the spell. The sphere is completely immune to all damage. Actually, the only method of removing the sphere is a successful dispel magic. Hence, the creature caught inside the globe is completely safe from all attacks, but at the same time is completely unable to affect the outside world.
+
+The caster has the option of using the spell to protect her allies. Resistances and saving throws are bypassed when the target is willing.~
+
+/*COPY ~misc_ex/spwi/spwi604.spl~ ~override~
+	SAY NAME1 ~Flesh to Stone~
+	
+	SAY UNIDENTIFIED_DESC ~Flesh to Stone
+(Alteration)
+
+Level: 6
+Range: Visual range of the caster
+Duration: 5 rounds.
+Casting Time: 6
+Area of Effect: 1 creature
+Saving Throw: None.
+
+This spell turns flesh of any sort to stone. Which will cause a slowing effect for 1 turn before the effect is removed. The intended subject of the spell receives no saving throw to avoid the effect.~*/
+
+COPY ~misc_ex/spwi/spwi607.spl~ ~override~
+	SAY NAME1 ~Mislead~
+	
+	SAY UNIDENTIFIED_DESC ~Mislead
+Level: 6
+School: Illusion
+Range: Personal
+Duration: 1 round/level
+Casting Time: 1
+Area of Effect: Caster
+Saving Throw: None
+
+When this spell is cast the wizard is affected with an Improved Invisibility spell and is teleported a few feet away from his original position. Meanwhile an exact image of the caster is created where he used to be with exactly the same hit points as the caster. The illusory double vanishes after 6 rounds and cannot perform any actions at all, like attacking or casting spells. It can, however, move around and act as a decoy for the invisible mage. As long as the image isn't destroyed, the caster can attack and cast spells while remaining completely hidden. The image will remain under the control of the caster until it is reduced to 0 hit points, or until it is affected by a dispel magic or a spell that destroys illusions such as True Seeing.~
+
+COPY ~misc_ex/spwi/spwi616.spl~ ~override~
+	SAY NAME1 ~Disintegrate~
+	
+	SAY UNIDENTIFIED_DESC ~Disintegrate
+Level: 6
+School: Alteration
+Range: Long
+Duration: Instant
+Casting Time: 6
+Area of Effect: 1 creature
+Saving Throw: Spell partial
+
+Upon casting this spell at another creature, a thin green ray shoots unerringly from the caster's fingertip toward the target. Upon contact, the creature must make a saving throw vs. spell at -2 or suffer 3d6 points of magic damage per 2 caster levels (to a maximum of 31d6). A creature that makes a successful save is partially affected, taking only 5d6 points of damage. This spell has no affect on clothing or equipment carried by the target.~
+
+COPY_EXISTING ~spwi717.spl~ ~override~
+	SAY UNIDENTIFIED_DESC ~Mordenkainen's Sword
+(Evocation)
+
+Level: 7
+Range: 0
+Duration: 1 round/level
+Casting Time: 7
+Area of Effect: Special
+Saving Throw: None
+
+Upon casting this spell, the wizard brings into being a shimmering, sword-like plane of force. The sword acts as a +4 weapon in all respects and deals 5d4 points of damage upon hitting a target. Once the spell is cast, the sword will float in the air completely under the caster's control. This does not prevent the caster from doing any other actions during the spell's duration.
+
+This summon is nearly impervious to all damage.
+Slashing:95%
+Crushing:95%
+Piercing:95%
+Missle:95%
+Fire:100%
+Cold:100%
+Electricity:100%
+Acid:100%
+Magic:0%~
+
+COPY_EXISTING ~sword01.cre~ ~override~ // mordenkainens sword
+	WRITE_SHORT 0x60 95
+	WRITE_SHORT 0x61 95
+	WRITE_SHORT 0x62 95
+	WRITE_SHORT 0x63 95
+
+
+COPY ~misc_ex/spwi/spwi625.spl~ ~override~
+	SAY NAME1 ~Revitalize~
+		
+	SAY UNIDENTIFIED_DESC ~Revitalize
+(Alteration)
+
+Level: 6
+Range: 50 ft.
+Duration: Permanent
+Casting Time: 6
+Area of Effect: 1 creature
+Saving Throw: None
+
+This spell will return any creature that has been turned to stone back to flesh. All possessions on the creature likewise return to normal. In addition it removes the effects of feeblemindedness. The effect is instantaneous and there are no Saving Throw checks required.~
+
+COPY ~misc_ex/spwi/spwi711.spl~ ~override~
+	SAY NAME1 ~Sphere of Chaos~
+	
+	SAY UNIDENTIFIED_DESC ~Sphere of Chaos
+(Alteration)
+
+Level: 7
+Range: 40 ft.
+Duration: 1 turn
+Casting Time: 7
+Area of Effect: 15-ft. radius
+Saving Throw: Special
+
+All enemies within the area of effect must make a Saving Throw vs. Spell every round that they remain in the sphere. If the Saving Throw is failed, one of the following random effects occurs:
+ – target is polymorphed into a squirrel
+ – target confused
+ – target bursts into flames
+ – target is paralyzed
+ – target is disintegrated
+ – target is healed 20 Hit Points
+ – target is randomly teleported
+ – target is rendered unconscious
+ – target is hasted~
+ 
+
+ACTION_IF FILE_EXISTS_IN_GAME ~dw#hdani.spl~ BEGIN
+COPY_EXISTING ~spwi714.spl~ ~override~
+	WRITE_BYTE 0x27a 40
+	WRITE_LONG 0x286 0
+	WRITE_SHORT 0x288 ~30~
+	SAY NAME1 ~Prismatic Spray~
+	
+	SAY UNIDENTIFIED_DESC ~Prismatic Spray
+(Conjuration/Summoning)
+
+Level: 7
+Range: 60 ft.
+Duration: Instant
+Casting Time: 7
+Area of Effect: 14-ft.-long cone 
+Saving Throw: Special
+
+When casting this spell, the wizard causes seven shimmering multicolored rays of light to flash from <PRO_HISHER> hand, portraying all colors of the visible spectrum. Any creature with fewer than 8 Hit Dice struck by a ray is blinded for 5 rounds, regardless of any other effect. All creatures caught within the area of effect will be touched by 1 or 2 of the rays, each of which has a different power and purpose:
+
+  Red — Inflicts 20 points of damage; Save vs. Spell for half.
+  Orange — Inflicts 40 points of damage; Save vs. Spell for half.
+  Yellow — Inflicts 80 points of damage; Save vs. Spell for half.
+  Green — Save vs. Poison or die; survivors take 20 points of poison damage.
+  Blue — Save vs. Petrification or be slowed.
+  Indigo — Save vs. Wand or be feebleminded.
+  Violet — Save vs. Spell or be disintegrated.~
+
+END
+  
+COPY ~misc_ex/spwi/spwi721.spl~ ~override~
+	SAY NAME1 ~Mass Invisibility~
+	
+	SAY UNIDENTIFIED_DESC ~Mass Invisibility 
+(Illusion/Phantasm)
+
+Level: 7
+Range: Visual range of the caster 
+Duration: 1 turn.
+Casting Time: 7
+Area of Effect: 15-ft. radius 
+Saving Throw: None 
+
+Upon casting this spell, the wizard causes all friendly creatures within the area of effect to be affected by the spell Improved Invisibility. This spell is similar to the Invisibility spell, but the recipient is able to attack, either by missile discharge, melee combat, or spellcasting, and remain unseen. Note, however, that there are sometimes telltale traces, a shimmering, so that an observant opponent can attack the invisible spell recipient. These traces are only noticeable when specifically looked for (after the invisible character has made <PRO_HISHER> presence known). Attacks against the invisible character suffer -4 penalties to the attack rolls, and the invisible character's Saving Throws are made with a +4 bonus.~
+
+COPY ~misc_ex/spwi/spwi910.spl~ ~override~
+	SAY NAME1 ~Imprionsment~
+	
+	SAY UNIDENTIFIED_DESC ~Imprisonment
+Level: 9
+School: Abjuration
+Range: Short
+Duration: Permanent
+Casting Time: 1 round
+Area of Effect: 1 creature
+Saving Throw: None
+
+When the Imprisonment spell is cast and the target creature is touched, it becomes entombed in a small sphere far beneath the surface of the earth in a state of suspended animation, conscious of its fate. The victim remains there unless the reverse of the spell, Freedom, is cast. Otherwise, the victim will remain there as long as the earth exists, rather a horrible fate, actually. If a Freedom spell is cast in the area where the creature was imprisoned then he will reappear exactly where he was last standing. Dispel magic will not free creatures trapped in this manner. The target's magic resistance, if any, does not affect this spell.~
+
+COPY ~misc_ex/spwi/spwi917.spl~ ~override~
+	SAY NAME1 ~Freedom~
+	
+	SAY UNIDENTIFIED_DESC ~Freedom
+Level: 9
+School: Abjuration
+Range: Personal
+Duration: Instant
+Casting Time: 1 round
+Area of Effect: Special
+Saving Throw: None
+
+When this spell is cast, all friendly creatures in the area are freed from spells and effects that restrict their movement or bind their minds. These effects include confusion, domination, entangle, feeblemindedness, hold, paralysis, petrification, sleep, slow, stun, and web. This spell will also cancel the effects of the spell Maze and return any characters trapped in the labyrinth of planes. If it is cast in an area where a creature was sealed with an Imprisonment spell, it will instantly free him and he will reappear exactly where he was standing when he was imprisoned.~
+
+
+/////////////////////////////////////////
+///////////////////////////////BEGIN MISC (Added to Spells)
+/////////////////////////////////////////
+
+COPY ~misc_ex/misc/rabbitsu.cre~ ~override~ // multiple summons change
+
+COPY_EXISTING ~spwi119.spl~ ~override~ // larloch fix
+	LPF DELETE_EFFECT INT_VAR check_globals = 0 match_opcode = 318 END
+	LPF DELETE_EFFECT INT_VAR check_globals = 0 match_opcode = 324 END
+
+COPY_EXISTING ~spwi119a.spl~ ~override~
+	LPF ALTER_SPELL_EFFECT INT_VAR match_opcode = 12 duration = 60 special = 1 END
+
+/////////////////////////////////////////
+///////////////////////////////BEGIN PRIEST SPELLS
+/////////////////////////////////////////
+	
+BEGIN ~Priest Spells~
+DESIGNATED 5
+REQUIRE_PREDICATE !(MOD_IS_INSTALLED ~misc_ex/misc_ex.tp2~ ~7~) ~Install before misc_ex #7 HLA Table~	
+
+COPY_EXISTING ~sppr201.spl~ ~override~
+	SAY NAME1 ~Aid~
+	
+	SAY UNIDENTIFIED_DESC ~Aid
+Level: 2
+School: Necromancy
+Sphere: Combat, Necromantics
+Range: Touch
+Duration: 1 turn/level
+Casting Time: 5
+Area of Effect: 1 creature
+Saving Throw: None
+
+The recipient of this spell gains a +1 bonus to attack rolls, damage rolls, and saving throws, plus 1d8 additional hit points +1 per level of the caster (up to a maximum of 1d8+10). The Aid spell allows the recipient to temporarily have more hit points than his full normal total. The bonus hit points are lost first when the recipient takes damage. Multiple castings of this spell are not cumulative.~
+
+COPY_EXISTING ~sppr210.spl~ ~override~
+	SAY NAME1 ~Resist Fire and Cold~
+	
+	SAY UNIDENTIFIED_DESC ~Resist Fire and Cold
+Level: 2
+School: Alteration
+Sphere: Protection
+Range: Touch
+Duration: 1 turn + 1 round/level
+Casting Time: 5
+Area of Effect: 1 creature
+Saving Throw: None
+
+When this spell is cast upon a creature by a priest, the creature's body is toughened to withstand heat and cold. The recipient can somewhat resist intense heat or cold (whether natural or magical in origin), such as red-hot charcoal, a large amount of burning oil, flaming swords, fireballs, burning hands, or wands of frost. In all of these cases, the temperature affects the creature to some extent. The recipient has all damage sustained by fire or cold reduced by 50%. Multiple castings of this spell are not cumulative.~
+
+COPY_EXISTING ~sppr302.spl~ ~override~
+SAY 0x50 ~Call Lightning
+(Alteration)
+
+Level: 3
+Sphere: Weather 
+Range: 80 ft.
+Duration: 1 round/4 levels
+Casting Time: 9
+Area of Effect: 360-ft. radius 
+Saving Throw: 1/2
+
+The caster is able to call down one bolt of lightning per round. The spell has a duration of 1 round every 4 levels of the caster. Each bolt causes 2d6 points of electrical damage, plus an additional 1d6 points per level of the caster. Thus, an 8th-level caster will call down two bolts, each dealing 10d6 (2d6 + 8d6) points of damage. The bolt of lightning flashes down in a vertical stroke at any of the priest's enemies. The first enemy struck by the lightning will be the enemy targeted. After that, any enemy (but no allies) may be struck by the ensuing lightning storm.~
+  READ_BYTE 0x19 outdoor
+  WRITE_BYTE 0x19 (outdoor BAND 0b11011111)
+  READ_LONG 0x64 "ability_offset"
+  READ_SHORT 0x68 "ability_count"
+  READ_LONG 0x6a "effect_offset"
+  FOR (i = 0; i < ability_count; ++i) BEGIN
+   READ_SHORT (ability_offset+i*0x28+0x1e) ability_effect_count
+   READ_SHORT (ability_offset+i*0x28+0x20) ability_effect_index
+   FOR (j=0;j<ability_effect_count;j+=1) BEGIN
+    WRITE_LONG ((effect_offset+(j+ability_effect_index)*0x30)+0x20) 6
+   END
+  END
+
+  
+ADD_SPELL "misc_ex/sppr/sppr504_2.spl" 1 3 MINOR_RAISE_DEAD
+LAF RES_NUM_OF_SPELL_NAME STR_VAR spell_name = ~MINOR_RAISE_DEAD~ RET spell_res END
+
+COPY_EXISTING ~%spell_res%.spl~ ~override~
+	SAY NAME1 ~Minor Raise Dead~
+	
+	SAY UNIDENTIFIED_DESC ~Minor Raise Dead
+(Necromancy)
+
+Level: 5
+Sphere: Necromantic 
+Range: Visual range of the caster
+Duration: Permanent 
+Casting Time: 10 
+Area of Effect: 1 person 
+Saving Throw: Special 
+
+When the priest casts a Raise Dead spell, <PRO_HESHE> can restore life to a dwarf, gnome, half-elf, halfling, elf, half-orc, or human; which has sometimes been known to cause a shock...
+
+The person has but 1 Hit Point when raised and must regain the rest by natural healing or curative magic.~
+
+WRITE_EVALUATED_ASCII 0xae ~%spell_res%~
+
+
+COPY ~misc_ex/sppr/sppr310.spl~ ~override~
+	SAY NAME1 ~Miscast Magic~
+	
+	SAY UNIDENTIFIED_DESC ~Miscast Magic
+Level: 3
+School: Enchantment
+Sphere: Chaos
+Range: Long
+Duration: 5 rounds
+Casting Time: 3
+Area of Effect: 1 creature
+Saving Throw: Spell negates
+
+Miscast Magic causes spells cast by the affected creature to take on an effect different from what they intend, similar to what happens during a wild surge. There is a chance that the result will be beneficial to the spellcaster, but generally, the effects are undesirable. The target must make save vs. spell at -2 to negate the spell's effects. Those who fail the save will miscast any spells cast in the next round, and each round after the first must make another save to avoid miscasting for one further round. The effects of the spell last for 5 rounds, or until dispelled.~
+
+COPY ~misc_ex/sppr/sppr404.spl~ ~override~
+	SAY NAME1 ~Neutralize Poison~
+	
+	SAY UNIDENTIFIED_DESC ~Neutralize Poison
+Level: 4
+School: Necromancy
+Sphere: Healing
+Range: Touch
+Duration: 3 rounds/+1 round level (max 5 rounds)
+Casting Time: 1
+Area of Effect: 1 creature
+Saving Throw: None
+
+This spell removes all toxins from the body, both natural and magical in nature. When this spell is cast upon a poisoned individual, it immediately neutralizes any poison. In addition, for the duration of the spell, the recipient is immune to any poison it is exposed to, and spells like Poison and Cloudkill won't affect the protected creature.~
+
+COPY ~misc_ex/sppr/sppr504.spl~ ~override~
+	SAY NAME1 ~Raise Dead~
+	
+	SAY UNIDENTIFIED_DESC ~Raise Dead
+(Necromancy)
+
+Level: 5
+Sphere: Necromantic 
+Range: Visual range of the caster
+Duration: Permanent 
+Casting Time: 10 
+Area of Effect: 1 person 
+Saving Throw: Special 
+
+When the priest casts a Raise Dead spell, <PRO_HESHE> can restore life to a dwarf, gnome, half-elf, halfling, elf, half-orc, or human; which has sometimes been known to cause a shock...
+
+The person has but 1 Hit Point when raised and and is healed for 20 hit points shortly after.~
+
+COPY ~misc_ex/sppr/sppr550.spl~ ~override~
+	SAY NAME1 ~Recall Spirit~
+	
+	SAY UNIDENTIFIED_DESC ~Recall Spirit
+(Necromancy)
+
+Level: 5
+Sphere: Summoning
+Range: Visual range of the caster
+Duration: Permanent
+Casting Time: 9
+Area of Effect: 1 person 
+Saving Throw: None
+
+The shaman calls back a deceased person's spirit if it still lingers near the body. By casting this spell, the Shaman reconnects the spirit to its body and restores the person to life with 1 Hit Point. Natural healing or curative magic can restore the rest of the target's vitality.~
+
+COPY ~misc_ex/sppr/sppr712.spl~ ~override~
+	SAY NAME1 ~Resurrection~
+	
+	SAY UNIDENTIFIED_DESC ~Resurrection
+(Necromancy)
+
+Level: 7
+Sphere: Necromantic
+Range: Touch
+Duration: Permanent
+Casting Time: 10
+Area of Effect: 1 creature
+Saving Throw: None
+
+Like the 5th-level spell Raise Dead, Resurrection will return a character back to life. However, Resurrection also heals the character for 30 hit points shortly after so that they are ready for the adventuring life right away.~
+
+COPY ~misc_ex/sppr/sppr722.spl~ ~override~
+	SAY NAME1 ~Storm of Vengeance~
+	
+	SAY UNIDENTIFIED_DESC ~Storm of Vengeance
+
+Level: 3
+Range: 270 ft.
+Duration: 3 rounds
+Casting Time: 8
+Area of Effect: 15-ft. radius
+Saving Throw: Special
+
+Casting this spell causes the earth to shake and the heavens to boil with blood and energy. All enemies of the caster are struck down by acidic rain, earthquakes, and lightning.
+
+All enemies are struck by acidic, poisonous rain and lightning. The storm lasts for 3 rounds. Each round, the victims suffer 1d6 electrical damage, 1d6 fire damage, and 1d6 acid damage (Save vs. Spell for half damage). They also have a chance to be poisoned (Save vs. Death negates) in the first round.~
+
+
+COPY ~misc_ex/sppr/sppr729.spl~ ~override~
+	SAY NAME1 ~Mass Raise Dead~
+	
+	SAY UNIDENTIFIED_DESC ~Mass Raise Dead
+(Necromancy)
+
+Level: 7
+Sphere: Necromantic
+Range: 30 ft.
+Duration: Permanent
+Casting Time: 10
+Area of Effect: Up to 5 party members
+Saving Throw: None
+
+A more powerful version of Raise Dead, this spell brings up to 5 party members back to life and heals 20 Hit Points shortly after. They can regain the rest of their Hit Points by natural healing or curative magic. This spell restores life to dwarves, gnomes, half-elves, halflings, elves, half-orcs, and humans.~
+
+BEGIN ~AoE Spell Fixes~
+DESIGNATED 10
+COPY_EXISTING ~grease.pro~ ~override~ ~cloud.pro~ ~override~ ~web.pro~ ~override~ ~cloudkil.pro~ ~override~ ~1pdeathf.pro~ ~override~ ~1pincind.pro~ ~override~ ~icestorm.pro~ ~override~ ~metswarm.pro~ ~override~ ~pfield.pro~ ~override~ ~strmveng.pro~ ~override~ ~entang2.pro~ ~override~
+
+WRITE_LONG 0xc (THIS BOR BIT6)
+
+COPY ~misc_ex/spellaoe/ARE_M01.wav~ ~override~
+COPY_EXISTING ~EFF_M31B.wav~ ~override/EFF_M31D.wav~
+COPY_EXISTING ~ARE_M01.wav~ ~override/EFF_M31B.wav~
+COPY ~misc_ex/spellaoe/EFF_M31A.wav~ ~override~ // grease sound/display fix
+COPY ~misc_ex/spellaoe/ARE_P01.wav~ ~override~
+
+COPY_EXISTING ~GREASE.PRO~ ~override~
+WRITE_ASCII 0x10 ~EFF_M31D~ #8
+WRITE_LONG 0x2c (THIS BOR (BIT6 + BIT22))
+WRITE_BYTE 0x217 254
+WRITE_LONG 0x240 (THIS BOR (BIT2 + BIT4))
+WRITE_SHORT 0x248 5
+WRITE_SHORT 0x24a 5
+WRITE_ASCII 0x208 ~EFF_M31A~ #8
+WRITE_ASCII 0x228 ~GREASED~ #8
+
+COPY_EXISTING ~CLOUD.PRO~ ~override~ // cloud fix/display
+WRITE_ASCII 0x18 ~~ #8
+
+COPY_EXISTING ~1PINCIND.PRO~ ~override~
+WRITE_ASCII 0x18 ~~ #8
+
+COPY_EXISTING ~WRITHING.PRO~ ~override~
+WRITE_LONG 0xc ((THIS BOR BIT6)BAND BNOT BIT3)
+WRITE_ASCII 0x18c ~~ #8
+WRITE_ASCII 0x208 ~ARE_P25~ #8
+
+COPY_EXISTING ~IDPRO301.PRO~ ~override~
+WRITE_LONG 0xc (THIS BOR BIT6)
+WRITE_ASCII 0x208 ~ARE_P24~ #8
+WRITE_ASCII 0x238 ~~ #8
+
+COPY_EXISTING ~IDPRO300.PRO~ ~override~
+WRITE_LONG 0xc (THIS BOR BIT6)
+
+COPY_EXISTING ~IDPRO309.PRO~ ~override~
+WRITE_LONG 0xc ((THIS BOR BIT6)BAND BNOT BIT3)
+WRITE_ASCII 0x18c ~~ #8
+WRITE_ASCII 0x208 ~ARE_P25~ #8
+
+COPY_EXISTING ~IDPRO317.PRO~ ~override~
+WRITE_LONG 0xc ((THIS BOR BIT6)BAND BNOT BIT3)
+WRITE_ASCII 0x18c ~~ #8
+
+COPY_EXISTING ~IDPRO213.PRO~ ~override~
+WRITE_LONG 0xc ((THIS BOR BIT6)BAND BNOT BIT3)
+WRITE_ASCII 0x18c ~~ #8
+
+COPY_EXISTING ~ICESTORM.PRO~ ~override~
+WRITE_ASCII 0x10 ~~ #8
+WRITE_ASCII 0x18 ~~ #8
+
+COPY_EXISTING ~METSWARM.PRO~ ~override~
+WRITE_ASCII 0x10 ~~ #8
+
+COPY_EXISTING ~STRMVENG.PRO~ ~override~
+WRITE_ASCII 0x10 ~~ #8
+
+COPY_EXISTING ~SPWI404.SPL~ ~override~
+LPF CLONE_EFFECT INT_VAR match_opcode = 12 opcode = 174 parameter1 = 0 parameter2 = 0 timing = 0 resist_dispel =  1 duration = 0 dicenumber = 0 dicesize = 0 savingthrow = 2 STR_VAR insert = last resource = "EFF_M34" END
+
+/////////////////////////////////////////
+///////////////////////////////BEGIN NPC THRESHOLD
+/////////////////////////////////////////
+
+BEGIN ~Disband Threshold for Joinable NPCs~
+DESIGNATED 105
+COPY ~misc_ex/tables/happy.2da~ ~override~
+
+PRETTY_PRINT_2DA
+
+/////////////////////////////////////////
+///////////////////////////////BEGIN ITEMS
+/////////////////////////////////////////
+
+BEGIN ~Items*See Readme~
+DESIGNATED 110
+REQUIRE_PREDICATE !(MOD_IS_INSTALLED ~misc_ex/misc_ex.tp2~ ~500~) ~Install before misc_ex #500 HLA Table~
+
+COPY ~misc_ex/items/potn10.itm~ ~override~
+	SAY NAME2 ~Potion of Invisibility~
+	
+	SAY IDENTIFIED_DESC ~This potion confers invisibility similar to the 2nd-level wizard spell of the same name. Entering combat terminates invisibility. Barring that, the effects will last for 1 turn.
+
+STATISTICS:
+
+Special: Invisibility
+Duration: 1 turn
+
+Weight: 1~
+
+COPY_EXISTING ~potn14.itm~ ~override~
+SAY IDENTIFIED_DESC ~This oil increases the movement by 2 and combat attack rate by 1. Thus, a movement rate of 9 becomes 11, and a character normally able to attack once in a round attacks twice. However, this does not reduce spellcasting time.
+
+STATISTICS:
+
+Special: +2 movement, +1 APR, +2 Speed Factor
+Duration: 1 turn
+
+Weight: 1~
+
+LPF ALTER_EFFECT INT_VAR match_opcode = 16 duration = 60 END
+LPF ALTER_EFFECT INT_VAR match_opcode = 174 match_duration = 300 duration = 60 END
+
+LPF CLONE_EFFECT INT_VAR match_opcode = 16 opcode = 321 power = 0 parameter1 = 0 parameter2 = 0 resist_dispel = 2 duration = 0 STR_VAR resource = POTN14 END
+
+LPF CLONE_EFFECT INT_VAR match_opcode = 16 opcode = 126 parameter1 = 2 parameter2 = 0 STR_VAR insert = below END
+LPF CLONE_EFFECT INT_VAR match_opcode = 16 opcode = 126 parameter1 = 50 parameter2 = 2 STR_VAR insert = below END
+
+COPY ~misc_ex/items/ring05.itm~ ~override~
+	SAY NAME2 ~Ring of Invisibility: Sandthief's Ring~
+	
+	SAY IDENTIFIED_DESC ~Ring of Invisibility: Sandthief's Ring 
+Held by a master Thief for the better part of a generation, this ring was put to bold use in the markets of Waterdeep. Working a crowd in broad daylight, the rogue would steal countless numbers of purses from nobles, replacing them with bags of sand so the theft would go unnoticed. His identity was never known, but the name "Sandthief" was cursed loudly in its stead. It is rumored he retired, and now lives among the nobles he used to rob.
+
+STATISTICS:
+
+Charge abilities:
+– Invisibility once per day
+  Duration: 5 rounds
+  Area of Effect: The wearer
+
+Weight: 0~
+
+COPY ~misc_ex/scrlwi/scrlpet.itm~ ~override~
+	SAY NAME1 ~Revitalize Scroll~
+	SAY NAME2 ~Revitalize Scroll~
+	
+	SAY IDENTIFIED_DESC ~This scroll will remove the effects of petrification or feeblemindedness from anyone afflicted by such an unfortunate condition. Simply approach the victim who has been afflicted, read the scroll, and direct the spell towards them.
+
+STATISTICS:
+
+– Revitalize
+  Range: 50 ft.
+  Area of Effect: 1 creature~
+
+COPY_EXISTING ~clck06.itm~ ~override~
+	SAY IDENTIFIED_DESC ~Cloak of Non-Detection: Whispers of Silence 
+Reportedly created for a lineage of the greatest burglars ever to walk the night, this cloak was apparently a success. No record exists of previous owners.
+
+STATISTICS:
+
+Equipped abilities:
+– While hidden or invisible, the wearer is non-detectable by magical means such as Detect Invisibility and scrying
+- This effect applies a non-classed version of non-detection, which prevents true sight from removing it.
+
+Weight: 3~
+
+COPY_EXISTING ~boot01.itm~ ~override~
+SAY IDENTIFIED_DESC ~Boots of Speed: The Paws of the Cheetah
+
+These enchanted boots were once the property of a deadly assassin fond of chasing down his prey. He moved with such speed that his targets often didn't have the opportunity to respond. Over time the assassin's fame spread, and though his name was never known, all knew to fear the words last heard by his victims, "You can hide, but you cannot run!"
+
+STATISTICS:
+
+Equipped abilities:
+– Movement rate increased by 2 (base is 9)
+
+Weight: 4~
+
+LPF ALTER_ITEM_EFFECT INT_VAR match_opcode = 126 parameter1 = 2 parameter2 = 0 END
+
+COPY_EXISTING ~leat24.itm~ ~override~
+SAY IDENTIFIED_DESC ~Created for the Grandmaster Assassin Vita Muerte, this suit not only provided protection but also enabled Vita to better pursue her fleeing victims... as the unfortunate wizard who fashioned this item for the ruthless killer soon learned. 
+
+STATISTICS:
+
+Equipped abilities:
+– Movement rate increased by 2 (base is 9)
+
+Armor Class: 1 (-1 vs. slashing, 0 vs. piercing and missile)
+Requires:
+ 6 Strength
+
+Weight: 5~
+
+LPF ALTER_ITEM_EFFECT INT_VAR match_opcode = 126 parameter1 = 2 parameter2 = 0 END
+
+COPY ~misc_ex/items/arrowex.pro~ ~override~
+COPY ~misc_ex/items/y5arwdet.spl~ ~override~
+WRITE_SHORT 0x98 ~3~
+LPF ADD_SPELL_EFFECT INT_VAR opcode = 215 target = 2 timing = 1 resist_dispel = 2 STR_VAR resource = "ICFIRSDI" END
+
+COPY_EXISTING ~arow06.itm~ ~override~ // arrow of detonation no longer applies on hit
+	SAY IDENTIFIED_DESC ~This arrow has a particularly debilitating effect on its victims as, upon impact, it explodes into a ball of fire and shrapnel affecting all within the area.
+
+STATISTICS:
+
+Damage: 1d6, +6d6 explosion upon impact (Save vs. Breath for half)
+Damage type: Missile
+Launcher: Bow
+
+Weight: 0~
+WRITE_SHORT 0x9c ~1~
+LPF CLONE_EFFECT INT_VAR header = 0 silent = 1 match_opcode = 12 opcode = 146 target = 2 parameter2 = 1 timing = 1 resist_dispel = 2 dicenumber = 0 dicesize = 0 savingthrow = 0 special = 0 STR_VAR resource = "Y5ARWDET" END
+LPF DELETE_ITEM_EFFECT INT_VAR opcode_to_delete = 12 END
+
+COPY ~misc_ex/items/y5firesd.spl~ ~override~ // fire seed no longer applies on hit
+WRITE_SHORT 0x98 ~226~
+
+COPY_EXISTING ~fireseed.itm~ ~override~
+WRITE_SHORT 0x9c ~1~
+LPF CLONE_EFFECT INT_VAR header = 0 silent = 1 match_opcode = 12 opcode = 146 target = 2 parameter2 = 1 timing = 1 resist_dispel = 2 dicenumber = 0 dicesize = 0 savingthrow = 0 special = 0 STR_VAR resource = "Y5FIRESD" END
+LPF DELETE_ITEM_EFFECT INT_VAR opcode_to_delete = 12 END
+
+
+COPY_EXISTING ~spin104a.spl~ ~override~ //foebane +5 hp change
+WRITE_SHORT 0x9e 1
+WRITE_SHORT 0xba 0
+WRITE_LONG 0xc6 (THIS BOR BIT0)
+
+COPY ~misc_ex/items/secret05.itm~ ~override~
+	SAY NAME1 ~Combined Pantaloons~
+	SAY NAME2 ~Big Metal Unit~
+	
+	SAY UNIDENTIFIED_DESC ~Long has the world marveled at the Golden Pantaloons, the Silver Pantaloons, and to a lesser extent, the Bronze Pantalettes. Revealed here for the first time are the secrets of their gregariously girding gussets that so softly shield your shanks. Ye gods! Get to identifyin' already! Now it can be told!
+
+STATISTICS:
+
+Weight: 45~
+	SAY IDENTIFIED_DESC ~Found within a long-forgotten pocket of our collected pantology, herein tales the lie of the Metal "Unit." 
+
+Gargantua was self-proclaimed lord of his immeasurable lower regions until his son, Pantagruel, questioned the accuracy of the ruler. With his shortcomings exposed, great Gargantua lay prostrate upon the ground while Pantagruel sought to cover his cuirass in case his now governing body lost its sway. He was warned that the people would cut him no slacks, but he never listened, and had burned his britches behind him. Undaunted, he fulfilled his animus with the robes of his father, as uncomfortable as that might sound, and shaped the Metal "Unit" with his own hands. 
+
+The rule of Pantagruel was a discommoding morass, his armor eventually suffering a breach in the breech that proved his undoing. As his basket left the pantry, so to speak, his regime fell to insurrection, and so complete was the sacking that not even his Metal "Unit" could be found. The component pieces, a pantaloon triumvirate, were lost in the annals of time. 
+
+You now bear the awesome responsibility of the Metal "Unit." Gussets of wind, seams like reality, pockets of resistance, the seat of power, and legs as flared as your temper. Polish it well; the onus is now on you.
+
+STATISTICS:
+
+Equipped abilities:
+– Immunity to backstab
+– Spellcasting, stealth, and thieving abilities disabled
+
+Requires:
+15 Strength
+
+Weight: 45~
+
+COPY ~misc_ex/items/secret04.itm~ ~override~
+	SAY NAME1 ~Flamethrower~
+	SAY NAME2 ~Scorcher Ammunition~
+	SAY UNIDENTIFIED_DESC ~Wands are 1 1/4 ft. long and slender. They are made of ivory, bone, or wood and are usually tipped with something—metal, crystal, stone, and so on. They are fragile and tend to break easily. Because of this, they are often kept in cases. 
+
+Wands are powered by charges, each use costing one or more charges (depending on the item). When a wand runs out of charges, it is consumed and destroyed.
+
+STATISTICS:
+
+Weight: 1~
+	SAY IDENTIFIED_DESC ~This ammunition for the Big Metal Rod will allow you to shoot a jet of flame at an enemy.
+
+STATISTICS:
+
+Weight: 1~
+
+COPY ~misc_ex/items/secret03.itm~ ~override~
+	SAY NAME1 ~Frag Grenade~
+	SAY NAME2 ~Frag Grenade~
+	SAY UNIDENTIFIED_DESC ~Wands are 1 1/4 ft. long and slender. They are made of ivory, bone, or wood and are usually tipped with something—metal, crystal, stone, and so on. They are fragile and tend to break easily. Because of this, they are often kept in cases. 
+
+Wands are powered by charges, each use costing one or more charges (depending on the item). When a wand runs out of charges, it is consumed and destroyed.
+
+STATISTICS:
+
+Weight: 1~
+	SAY IDENTIFIED_DESC ~This skull can be launched at your enemies via the Big Metal Rod. It will explode into fragments when an enemy approaches it and damage everyone within the radius of the explosion.
+
+STATISTICS:
+Damage: 1d6 (fire)
+
+Weight: 1~
+
+COPY ~misc_ex/items/secret02.itm~ ~override~
+	SAY NAME1 ~No such index~
+	SAY NAME2 ~Pulse Ammunition~
+	
+	SAY UNIDENTIFIED_DESC ~No such index~
+	SAY IDENTIFIED_DESC ~This Pulse Ammunition allows you to shoot small balls of pure energy at a frightening pace from the Big Metal Rod.
+
+STATISTICS:
+
+Weight: 0~
+	
+COPY ~misc_ex/items/secret01.itm~ ~override~
+	SAY NAME1 ~Fists~
+	SAY NAME2 ~Big Metal Rod~
+	
+	SAY UNIDENTIFIED_DESC ~No such index~
+	SAY IDENTIFIED_DESC ~The Big Metal Rod was designed to be used with the Big Metal Unit. It has several types of ammunition that can be launched at your enemies... or friends... 
+
+STATISTICS:
+
+Weight: 4~
+
+COPY_EXISTING ~sw1h63.itm~ ~override~
+	SAY IDENTIFIED_DESC ~Reunited with Fflar's scabbard, Foebane is an even greater weapon than the legends claimed.
+
+STATISTICS:
+
+Equipped abilities:
+– Saving Throws: +1
+
+Combat abilities:
+– Each successful hit drains 1 hp to the wielder.
+
+THAC0: +5
+Damage: 2d4+5, +6 damage vs. undead, shapeshifters, demons, and devils
+Damage type: Slashing
+Speed Factor: 3
+Proficiency Type: Bastard Sword
+Type: One-handed
+Requires:
+ 11 Strength
+
+Weight: 5~
+
+COPY_EXISTING ~arow01.itm~ ~override~ ~bull01.itm~ ~override~ ~bolt01.itm~ ~override~
+	WRITE_LONG 0x34 1
+
+COPY ~misc_ex/items/waninja.itm~ ~override~
+	SAY IDENTIFIED_DESC ~When a member of the Scarlet Brotherhood kills one of that organization's "great enemies," they are often rewarded with this sword. How this sword made its way from the world of Greyhawk (where the Brotherhood is based) to Faerûn is a mystery. When unsheathed, the ninjatō will glow blood red.
+
+STATISTICS:
+
+Combat abilities:
+– 1 extra attack per round
+– Hit target takes 1 points of poison damage per 2 seconds for 2 rounds (Save vs. Death negates)
+
+THAC0: +3
+Damage: 1d8+3 (slashing)
+Speed Factor: 1
+Proficiency Type: Scimitar/Wakizashi/Ninjatō
+Type: One-handed
+Requires:
+ 6 Strength
+
+Weight: 2~
+
+COPY ~misc_ex/items/misc98.itm~ ~override~
+SAY NAME1 ~Blood-filled Goblet~
+SAY NAME2 ~Durlag's Goblet~
+SAY UNIDENTIFIED_DESC ~Dark and rancid blood lurks within this pewter goblet. The lip is black and caked where it appears others have tasted from it. Scratched deep into the pewter are the words "Taste My Fear."
+
+STATISTICS:
+
+Weight: 2~
+SAY IDENTIFIED_DESC ~Scratched deep into the side of this cursed goblet are the words "Taste My Fear." It is said that one can regain lost health from the dark blood that lurks within its pewter depths. This comes with a price, however, as all who drink of the blood become cursed with the fear it brings. This effect will last up to 3 rounds or until dispelled.
+
+STATISTICS:
+
+Special: 
+– Fully heals the imbiber
+– Causes imbiber to doubt their actions
+
+Duration: 3 rounds
+
+Weight: 2~
+READ_LONG 0x18 value
+WRITE_LONG 0x18 (value BOR BIT0)
+WRITE_SHORT 0x94 10
+
+COPY_EXISTING ~scrl63.itm~ ~override~ // raise dead scroll prices adjusted accordinly
+WRITE_LONG 0x34 1500
+
+COPY_EXISTING_REGEXP ~^.+\.itm$~ ~override~
+READ_SHORT 0x1c item
+READ_SHORT  0x38 "max"
+PATCH_IF (item = 12) BEGIN
+	READ_ASCII 0x22 shield
+	PATCH_IF ("%shield%" STRING_EQUAL_CASE "D1" = 1) BEGIN
+		LPF ADD_ITEM_EQEFFECT INT_VAR opcode = 86 target = 1 parameter1 = 2 timing = 2 resist_dispel = 2 END
+		LPF ADD_ITEM_EQEFFECT INT_VAR opcode = 87 target = 1 parameter1 = 2 timing = 2 resist_dispel = 2 END
+		LPF ADD_ITEM_EQEFFECT INT_VAR opcode = 88 target = 1 parameter1 = 2 timing = 2 resist_dispel = 2 END
+		LPF ADD_ITEM_EQEFFECT INT_VAR opcode = 89 target = 1 parameter1 = 2 timing = 2 resist_dispel = 2 END
+		PATCH_FOR_EACH offset IN 0x50 0x54 BEGIN
+			READ_LONG ~%offset%~ desc_strref
+			PATCH_IF (desc_strref >= 0 && desc_strref < 2147483646) BEGIN
+				READ_STRREF ~%offset%~ desc
+				INNER_PATCH_SAVE desc ~%desc%~ BEGIN
+					REPLACE_TEXTUALLY ~\(\bEquipped abilities:\)~ ~\1%WNL%– Physical Resistance: 2%~
+				END
+				SAY_EVALUATED ~%offset%~ ~%desc%~
+			END
+		END
+	END ELSE
+	PATCH_IF ("%shield%" STRING_EQUAL_CASE "C0" = 1) OR ("%shield%" STRING_EQUAL_CASE "C4" = 1) OR ("%shield%" STRING_EQUAL_CASE "D2" = 1) OR ("%shield%" STRING_EQUAL_CASE "C1" = 1) OR ("%shield%" STRING_EQUAL_CASE "C3" = 1) OR ("%shield%" STRING_EQUAL_CASE "C7" = 1) OR ("%shield%" STRING_EQUAL_CASE "D3" = 1) BEGIN
+		LPF ADD_ITEM_EQEFFECT INT_VAR opcode = 86 target = 1 parameter1 = 3 timing = 2 resist_dispel = 2 END
+		LPF ADD_ITEM_EQEFFECT INT_VAR opcode = 87 target = 1 parameter1 = 3 timing = 2 resist_dispel = 2 END
+		LPF ADD_ITEM_EQEFFECT INT_VAR opcode = 88 target = 1 parameter1 = 3 timing = 2 resist_dispel = 2 END
+		LPF ADD_ITEM_EQEFFECT INT_VAR opcode = 89 target = 1 parameter1 = 3 timing = 2 resist_dispel = 2 END
+		PATCH_FOR_EACH offset IN 0x50 0x54 BEGIN
+			READ_LONG ~%offset%~ desc_strref
+			PATCH_IF (desc_strref >= 0 && desc_strref < 2147483646) BEGIN
+				READ_STRREF ~%offset%~ desc
+				INNER_PATCH_SAVE desc ~%desc%~ BEGIN
+					REPLACE_TEXTUALLY ~\(\bEquipped abilities:\)~ ~\1%WNL%– Physical Resistance: 3%~
+				END
+				SAY_EVALUATED ~%offset%~ ~%desc%~
+			END
+		END
+	END ELSE
+	PATCH_IF ("%shield%" STRING_EQUAL_CASE "C2" = 1) OR ("%shield%" STRING_EQUAL_CASE "C5" = 1) OR ("%shield%" STRING_EQUAL_CASE "C6" = 1) OR ("%shield%" STRING_EQUAL_CASE "D4" = 1) BEGIN
+		LPF ADD_ITEM_EQEFFECT INT_VAR opcode = 86 target = 1 parameter1 = 5 timing = 2 resist_dispel = 2 END
+		LPF ADD_ITEM_EQEFFECT INT_VAR opcode = 87 target = 1 parameter1 = 5 timing = 2 resist_dispel = 2 END
+		LPF ADD_ITEM_EQEFFECT INT_VAR opcode = 88 target = 1 parameter1 = 5 timing = 2 resist_dispel = 2 END
+		LPF ADD_ITEM_EQEFFECT INT_VAR opcode = 89 target = 1 parameter1 = 5 timing = 2 resist_dispel = 2 END
+		PATCH_FOR_EACH offset IN 0x50 0x54 BEGIN
+			READ_LONG ~%offset%~ desc_strref
+			PATCH_IF (desc_strref >= 0 && desc_strref < 2147483646) BEGIN
+				READ_STRREF ~%offset%~ desc
+				INNER_PATCH_SAVE desc ~%desc%~ BEGIN
+					REPLACE_TEXTUALLY ~\(\bEquipped abilities:\)~ ~\1%WNL%– Physical Resistance: 5%~
+				END
+				SAY_EVALUATED ~%offset%~ ~%desc%~
+			END
+		END
+	END
+END
+PATCH_IF (
+           ("%max%" > 1) AND // if item can already stack and is of the weapon...
+           (
+             ("%weapon%" =  5) OR // arrows,
+             ("%weapon%" = 14) OR // bullets,
+             ("%weapon%" = 16) OR // dagger
+             ("%weapon%" = 21) OR // hammer (iwd2)
+             ("%weapon%" = 24) OR // darts,
+             ("%weapon%" = 25) OR // axe,
+             ("%weapon%" = 29) OR // spears,
+             ("%weapon%" = 31)    // bolts,
+           )
+         ) BEGIN
+	READ_SHORT 0x38 current
+	PATCH_IF (stack > current) BEGIN
+		WRITE_SHORT  0x38 stack
+	END
+END
+BUT_ONLY
+	
+COPY ~misc_ex/items/clck25.itm~ ~override~ // cloak of stars change
+COPY ~misc_ex/items/ohrclck1.itm~ ~override~ // cloak of stars change
+COPY ~misc_ex/items/ohnrobe1.itm~ ~override~ // wild mage robe change
+
+BEGIN ~Item Recharging~
+DESIGNATED 115
+
+COPY_EXISTING ~AMUL01.ITM~ ~override~
+WRITE_LONG 0x18 (THIS BOR BIT0)
+WRITE_SHORT 0x1c 35
+
+COPY_EXISTING ~AMUL15.ITM~ ~override~
+WRITE_LONG 0x34 4000
+WRITE_SHORT 0x1c 35
+LPF ALTER_ITEM_HEADER INT_VAR charges = 15 drained = 0 END
+
+COPY_EXISTING ~AMUL17.ITM~ ~override~
+WRITE_LONG 0x18 (THIS BOR BIT0)
+WRITE_SHORT 0x1c 35
+
+COPY_EXISTING ~CLCK20.ITM~ ~override~
+WRITE_LONG 0x18 (THIS BOR BIT0)
+
+COPY_EXISTING ~MISC73.ITM~ ~override~
+WRITE_LONG 0x18 (THIS BOR BIT0)
+
+COPY_EXISTING ~OHRCLCK3.ITM~ ~override~ 
+WRITE_LONG 0x18 (THIS BOR BIT0)
+
+COPY_EXISTING ~ring20.itm~ ~override~ // same
+WRITE_LONG 0x18 (THIS BOR BIT0)
+
+COPY_EXISTING ~STAF05.ITM~ ~override~ // unsellable staff of striking/doesn't leave when used up
+WRITE_LONG 0x18 (THIS BOR BIT0)
+LPF ALTER_ITEM_HEADER INT_VAR drained = 0 END
+
+SAY IDENTIFIED_DESC ~Staves of Striking are made by the gold elves of Drelagara on Evermeet. The staves have a life of their own and jump to attack in their bearer's hands. The elven craftsmen rarely sell them to other races, but these powerful melee weapons do surface occasionally in Faerûn. Strikes made consume some of the magical essence imbued into the staff, which will strike as a +3 weapon when expended.
+
+STATISTICS:
+
+THAC0: +3
+Damage: 1d6+9 (crushing)
+Speed Factor: 1
+Proficiency Type: Quarterstaff
+Type: Two-handed
+Requires:
+ 5 Strength
+
+Weight: 4~
+
+COPY_EXISTING_REGEXP GLOB ~^.+\.sto$~ ~override~
+LPF REMOVE_STORE_PURCHASE INT_VAR category = 35 END
+
+ACTION_IF GAME_INCLUDES ~bg1~ BEGIN	
+	COPY_EXISTING ~STO0703.sto~ ~override~ ~HIGHHEDG.sto~ ~override~ 
+	//READ_LONG 0x14 storemarkup
+	READ_LONG 0x18 buymarkup
+	//WRITE_LONG 0x14 (storemarkup + 40)
+	WRITE_LONG 0x18 (buymarkup - 10)
+	LPF ADD_STORE_PURCHASE INT_VAR category = 35 END
+END
+
+ACTION_IF GAME_INCLUDES ~sod~ BEGIN	
+	COPY_EXISTING ~BDSORCSC.sto~ ~override~
+	//READ_LONG 0x14 storemarkup
+	READ_LONG 0x18 buymarkup
+	//WRITE_LONG 0x14 (storemarkup + 40)
+	WRITE_LONG 0x18 (buymarkup - 10)
+	LPF ADD_STORE_PURCHASE INT_VAR category = 35 END
+END
+
+ACTION_IF GAME_INCLUDES ~soa~ BEGIN	
+	COPY_EXISTING ~RIBALD3.sto~ ~override~
+	//READ_LONG 0x14 storemarkup
+	READ_LONG 0x18 buymarkup
+	//WRITE_LONG 0x14 (storemarkup + 40)
+	WRITE_LONG 0x18 (buymarkup - 10)
+	LPF ADD_STORE_PURCHASE INT_VAR category = 35 END
+END
+
+ACTION_IF GAME_INCLUDES ~tob~ BEGIN	
+	COPY_EXISTING ~25SPELL.sto~ ~override~ ~25SPELL2.sto~ ~override~
+	//READ_LONG 0x14 storemarkup
+	READ_LONG 0x18 buymarkup
+	//WRITE_LONG 0x14 (storemarkup + 40)
+	WRITE_LONG 0x18 (buymarkup - 10)
+	LPF ADD_STORE_PURCHASE INT_VAR category = 35 END
+END
+
+COPY_EXISTING ~WAND02.ITM~ ~override~ /////////////////////////// fear
+WRITE_LONG 0x34 4000
+LPF ALTER_ITEM_HEADER INT_VAR charges = 20 drained = 0 END
+
+COPY_EXISTING ~WAND03.ITM~ ~override~ /////////////////////////// missile
+WRITE_LONG 0x34 5000
+LPF ALTER_ITEM_HEADER INT_VAR charges = 50 drained = 0 END
+
+COPY_EXISTING ~WAND04.ITM~ ~override~ /////////////////////////// paralyzation
+WRITE_LONG 0x34 7500
+LPF ALTER_ITEM_HEADER INT_VAR charges = 10 drained = 0 END
+
+COPY_EXISTING ~WAND05.ITM~ ~override~ /////////////////////////// fire
+WRITE_LONG 0x34 9375
+LPF ALTER_ITEM_HEADER INT_VAR charges = 15 drained = 0 END
+LPF ALTER_EFFECT INT_VAR check_globals = 0 check_headers = 1 match_opcode = 12 match_dicesize = 6 parameter1 = 0 dicenumber = 3 dicesize = 6 END
+
+SAY IDENTIFIED_DESC ~The wand will cough forth a huge, burning ball of fire that streaks out to the desired range (to a maximum of 90 ft.) and bursts in a fiery, violent blast, just like the Fireball spell. The Fireball inflicts 6d6 points of damage, but all 1s rolled are counted as 2s. The victim(s) may make a Save vs. Wand in order to take only half damage. The second ability of the wand is akin to the spell Agannazar's Scorcher in that a column of flame will streak toward the victim inflicting 6d6+6 damage, with a Save vs. Wand for half.
+
+STATISTICS:
+
+Charge abilities:
+– Fireball
+  Damage: 6d5 fire (Save vs. Wand for half)
+  Range: 90 ft.
+  Area of Effect: 15-ft. radius
+
+– Agannazar's Scorcher
+  Damage: 3d6 fire (Save vs. Wand for half)
+  Range: 90 ft.
+  Area of Effect: 1 creature
+
+Requires:
+ 9 Intelligence
+
+Weight: 1~
+
+COPY_EXISTING ~WAND06.ITM~ ~override~ /////////////////////////// frost
+WRITE_LONG 0x34 9000
+LPF ALTER_ITEM_HEADER INT_VAR charges = 20 drained = 0 END
+
+COPY_EXISTING ~WAND07.ITM~ ~override~ /////////////////////////// lightning
+WRITE_LONG 0x34 6000
+LPF ALTER_ITEM_HEADER INT_VAR charges = 20 drained = 0 END
+
+COPY_EXISTING ~WAND08.ITM~ ~override~ /////////////////////////// sleep
+WRITE_LONG 0x34 2500
+LPF ALTER_ITEM_HEADER INT_VAR charges = 25 drained = 0 END
+
+COPY_EXISTING ~WAND09.ITM~ ~override~ /////////////////////////// polymorphing
+WRITE_LONG 0x34 5000
+LPF ALTER_ITEM_HEADER INT_VAR charges = 10 drained = 0 END
+
+COPY_EXISTING ~WAND10.ITM~ ~override~ /////////////////////////// monster summoning
+WRITE_LONG 0x34 9000
+LPF ALTER_ITEM_HEADER INT_VAR charges = 10 drained = 0 END
+
+COPY_EXISTING ~WAND11.ITM~ ~override~ /////////////////////////// heavens
+WRITE_LONG 0x34 8000
+LPF ALTER_ITEM_HEADER INT_VAR charges = 20 drained = 0 END
+
+COPY_EXISTING ~WAND12.ITM~ ~override~ /////////////////////////// wonder
+WRITE_LONG 0x34 6000
+LPF ALTER_ITEM_HEADER INT_VAR charges = 5 drained = 0 END
+
+COPY_EXISTING ~WAND13.ITM~ ~override~ /////////////////////////// cloudkill
+WRITE_LONG 0x34 7500
+LPF ALTER_ITEM_HEADER INT_VAR charges = 5 drained = 0 END
+
+COPY_EXISTING ~WAND18.ITM~ ~override~ /////////////////////////// spell strike 
+WRITE_LONG 0x34 13500
+LPF ALTER_ITEM_HEADER INT_VAR charges = 5 drained = 0 END
+
+COPY_EXISTING ~WAND19.ITM~ ~override~ /////////////////////////// cursing
+WRITE_LONG 0x34 3750
+LPF ALTER_ITEM_HEADER INT_VAR charges = 5 drained = 0 END
+
+ACTION_IF GAME_INCLUDES ~sod~ BEGIN
+	COPY_EXISTING ~BDWAND01.ITM~ ~override~ // unsellable water ele wand
+	WRITE_LONG 0x18 (THIS BOR BIT0)
+END
+
+ACTION_IF GAME_INCLUDES ~soa~ OR GAME_INCLUDES ~tob~ BEGIN
+
+	COPY_EXISTING ~RODS06.ITM~ ~override~ /////////////////////////// reversal
+	WRITE_LONG 0x34 7000
+	LPF ALTER_ITEM_HEADER INT_VAR charges = 10 drained = 0 END
+	
+	COPY_EXISTING ~RODS03.ITM~ ~override~ /////////////////////////// resurrection
+	WRITE_LONG 0x34 13000
+	LPF ALTER_ITEM_HEADER INT_VAR charges = 10 drained = 0 END
+
+	SAY IDENTIFIED_DESC ~Rod of Resurrection
+	
+This rod enables anyone to resurrect the dead and heal the injured as if they were of high enough level to cast the raise dead and heal spells and as if they were a priest. No rest is required, as the rod bestows the life giving effects.  Each use of the rod expends one charge.
+
+STATISTICS
+
+Special Abilities (one charge):  
+Raise Dead~
+	LPF ALTER_ITEM_HEADER INT_VAR header = 1 new_header_type = 1 END
+	LPF DELETE_ITEM_HEADER INT_VAR header_type = 3 END
+	LPF ALTER_ITEM_HEADER INT_VAR header = 1 new_header_type = 3 END
+	LPF CLONE_EFFECT INT_VAR match_opcode = 32 opcode = 324 target = 2 power = 0 parameter1 = 0 parameter2 = 75 timing = 0 resist_dispel = 0 duration = 1 dicenumber = 0 dicesize = 0 STR_VAR resource = "RODS03" END
+	LPF CLONE_EFFECT INT_VAR match_opcode = 32 opcode = 128 target = 2 power = 0 parameter1 = 0 parameter2 = 0 timing = 0 resit_dispel = 2 duration = 30 probability1 = 25 probability2 = 0 STR_VAR insert = below END
+	LPF CLONE_EFFECT INT_VAR match_opcode = 128 opcode = 39 parameter1 = 1 probability1 = 45 probability2 = 20 END
+	LPF CLONE_EFFECT INT_VAR match_opcode = 128 opcode = 3 probability1 = 65 probability2 = 45 END
+	LPF CLONE_EFFECT INT_VAR match_opcode = 128 opcode = 45 probability1 = 85 probability2 = 60 END
+	LPF CLONE_EFFECT INT_VAR match_opcode = 128 opcode = 54 parameter1 = (0 - 20) parameter2 = 1 duration = 36 probability1 = 100 probability2 = 80 END
+	LPF CLONE_EFFECT INT_VAR match_opcode = 128 opcode = 280 parameter2 = 2 duration = 36 probability1 = 100 probability2 = 80 END
+	LPF CLONE_EFFECT INT_VAR match_opcode = 128 opcode = 126 parameter1 = 50 parameter2 = 2 duration = 36 probability1 = 100 probability2 = 80 END
+	
+END
+
+/////////////////////////////////////////
+///////////////////////////////BEGIN CRE LEVELS
+/////////////////////////////////////////
+
+BEGIN ~Additional NPC Levels~
+DESIGNATED 120
+REQUIRE_PREDICATE !(MOD_IS_INSTALLED ~STRATAGEMS/SETUP-STRATAGEMS.TP2~ ~5900~) ~Must be installed before SCS #5900~
+
+COPY_EXISTING_REGEXP GLOB ~^.+\.cre$~ ~override~
+READ_LONG  0x1cc "biography"
+PATCH_IF ((biography > 2147483646) OR (biography < 1)) BEGIN // no legit bio string
+	READ_LONG 0x10 flags
+	READ_BYTE 0x273 class
+	READ_BYTE 0x234 curlevel
+	
+	PATCH_IF ((curlevel >= 11) AND (curlevel <= 20)) BEGIN
+		// single-classes
+		PATCH_IF ((class =  1) OR     		// mage
+				(class =  3) OR     		// cleric
+				(class =  5) OR     		// bard
+				(class =  6) OR     		// paladin
+				(class = 11) OR     		// druid
+				(class = 12) OR     		// ranger
+				(class = 19) OR     		// sorcerer
+				(class = 21))	BEGIN 		// shaman
+			WRITE_BYTE 0x234 (THIS + 3) 	// bump level by one
+		END ELSE  
+	
+		// double-classes
+		PATCH_IF ((class =  7) AND (flags & BIT4 = 0)) BEGIN // true multi fm OR f > m dual
+			WRITE_BYTE 0x235 (THIS + 3) // adjust level 2
+		END ELSE  
+		PATCH_IF ((class =  8) AND (flags & BIT5 = 0)) BEGIN // true multi fc OR f > c dual
+			WRITE_BYTE 0x235 (THIS + 3) // adjust level 2
+		END ELSE
+		PATCH_IF (class =  13) BEGIN // mt
+			PATCH_IF ((flags & BIT4 = 0) AND (flags & BIT6 = 0)) BEGIN // true multi
+				WRITE_BYTE 0x234 (THIS + 3) // adjust level 1
+			END ELSE
+			PATCH_IF (flags & BIT6 = BIT6) BEGIN // t > m multi
+				WRITE_BYTE 0x235 (THIS + 3) // adjust level 2
+			END  
+		END ELSE
+		PATCH_IF (class =  14) BEGIN // cm
+			WRITE_BYTE 0x235 (THIS + 3) // adjust level 2
+			PATCH_IF ((flags & BIT4 = 0) AND (flags & BIT5 = 0)) BEGIN // true multi
+				WRITE_BYTE 0x234 (THIS + 3) // adjust level 1
+			END
+		END ELSE
+		PATCH_IF (class =  15) BEGIN // ct
+			PATCH_IF ((flags & BIT5 = 0) AND (flags & BIT6 = 0)) BEGIN // true multi
+				WRITE_BYTE 0x234 (THIS + 3) // adjust level 1
+			END ELSE
+			PATCH_IF (flags & BIT6 = BIT6) BEGIN // t > c multi
+				WRITE_BYTE 0x235 (THIS + 3) // adjust level 2
+			END
+		END ELSE
+		PATCH_IF ((class =  16) AND (flags & BIT4 = 0)) BEGIN // true multi fd OR f > d dual
+			WRITE_BYTE 0x235 (THIS + 3) // adjust level 2
+		END ELSE
+		PATCH_IF (class =  18) BEGIN // cr
+			WRITE_BYTE 0x235 (THIS + 3) // adjust level 2
+			PATCH_IF ((flags & BIT5 = 0) AND (flags & BIT6 = 0)) BEGIN // true multi
+				WRITE_BYTE 0x234 (THIS + 3) // adjust level 1
+			END
+		END ELSE  
+	
+		// triple classes
+		PATCH_IF ((class = 10) OR     // fighter-mage-thief
+				(class = 17)) BEGIN // fighter-mage-cleric  
+			WRITE_BYTE 0x235 (THIS + 3) // adjust level 2
+			PATCH_IF (class = 17) BEGIN
+				WRITE_BYTE 0x235 (THIS + 3) // adjust level 3
+			END
+		END
+	END ELSE
+	PATCH_IF ((curlevel >= 5) AND (curlevel <= 10)) BEGIN
+		// single-classes
+		PATCH_IF ((class =  1) OR     		// mage
+				(class =  3) OR     		// cleric
+				(class =  5) OR     		// bard
+				(class =  6) OR     		// paladin
+				(class = 11) OR     		// druid
+				(class = 12) OR     		// ranger
+				(class = 19) OR     		// sorcerer
+				(class = 21))	BEGIN 		// shaman
+			WRITE_BYTE 0x234 (THIS + 2) 	// bump level by one
+		END ELSE  
+	
+		// double-classes
+		PATCH_IF ((class =  7) AND (flags & BIT4 = 0)) BEGIN // true multi fm OR f > m dual
+			WRITE_BYTE 0x235 (THIS + 2) // adjust level 2
+		END ELSE  
+		PATCH_IF ((class =  8) AND (flags & BIT5 = 0)) BEGIN // true multi fc OR f > c dual
+			WRITE_BYTE 0x235 (THIS + 2) // adjust level 2
+		END ELSE
+		PATCH_IF (class =  13) BEGIN // mt
+			PATCH_IF ((flags & BIT4 = 0) AND (flags & BIT6 = 0)) BEGIN // true multi
+				WRITE_BYTE 0x234 (THIS + 2) // adjust level 1
+			END ELSE
+			PATCH_IF (flags & BIT6 = BIT6) BEGIN // t > m multi
+				WRITE_BYTE 0x235 (THIS + 2) // adjust level 2
+			END  
+		END ELSE
+		PATCH_IF (class =  14) BEGIN // cm
+			WRITE_BYTE 0x235 (THIS + 2) // adjust level 2
+			PATCH_IF ((flags & BIT4 = 0) AND (flags & BIT5 = 0)) BEGIN // true multi
+				WRITE_BYTE 0x234 (THIS + 2) // adjust level 1
+			END
+		END ELSE
+		PATCH_IF (class =  15) BEGIN // ct
+			PATCH_IF ((flags & BIT5 = 0) AND (flags & BIT6 = 0)) BEGIN // true multi
+				WRITE_BYTE 0x234 (THIS + 2) // adjust level 1
+			END ELSE
+			PATCH_IF (flags & BIT6 = BIT6) BEGIN // t > c multi
+				WRITE_BYTE 0x235 (THIS + 2) // adjust level 2
+			END
+		END ELSE
+		PATCH_IF ((class =  16) AND (flags & BIT4 = 0)) BEGIN // true multi fd OR f > d dual
+			WRITE_BYTE 0x235 (THIS + 2) // adjust level 2
+		END ELSE
+		PATCH_IF (class =  18) BEGIN // cr
+			WRITE_BYTE 0x235 (THIS + 2) // adjust level 2
+			PATCH_IF ((flags & BIT5 = 0) AND (flags & BIT6 = 0)) BEGIN // true multi
+				WRITE_BYTE 0x234 (THIS + 2) // adjust level 1
+			END
+		END ELSE  
+	
+		// triple classes
+		PATCH_IF ((class = 10) OR     // fighter-mage-thief
+				(class = 17)) BEGIN // fighter-mage-cleric  
+			WRITE_BYTE 0x235 (THIS + 2) // adjust level 2
+			PATCH_IF (class = 17) BEGIN
+				WRITE_BYTE 0x235 (THIS + 2) // adjust level 3
+			END
+		END
+	END ELSE
+	PATCH_IF (curlevel <= 4) BEGIN
+		// single-classes
+		PATCH_IF ((class =  1) OR     		// mage
+				(class =  3) OR     		// cleric
+				(class =  5) OR     		// bard
+				(class =  6) OR     		// paladin
+				(class = 11) OR     		// druid
+				(class = 12) OR     		// ranger
+				(class = 19) OR     		// sorcerer
+				(class = 21))	BEGIN 		// shaman
+			WRITE_BYTE 0x234 (THIS + 1) 	// bump level by one
+		END ELSE  
+	
+		// double-classes
+		PATCH_IF ((class =  7) AND (flags & BIT4 = 0)) BEGIN // true multi fm OR f > m dual
+			WRITE_BYTE 0x235 (THIS + 1) // adjust level 2
+		END ELSE  
+		PATCH_IF ((class =  8) AND (flags & BIT5 = 0)) BEGIN // true multi fc OR f > c dual
+			WRITE_BYTE 0x235 (THIS + 1) // adjust level 2
+		END ELSE
+		PATCH_IF (class =  13) BEGIN // mt
+			PATCH_IF ((flags & BIT4 = 0) AND (flags & BIT6 = 0)) BEGIN // true multi
+				WRITE_BYTE 0x234 (THIS + 1) // adjust level 1
+			END ELSE
+			PATCH_IF (flags & BIT6 = BIT6) BEGIN // t > m multi
+				WRITE_BYTE 0x235 (THIS + 1) // adjust level 2
+			END  
+		END ELSE
+		PATCH_IF (class =  14) BEGIN // cm
+			WRITE_BYTE 0x235 (THIS + 1) // adjust level 2
+			PATCH_IF ((flags & BIT4 = 0) AND (flags & BIT5 = 0)) BEGIN // true multi
+				WRITE_BYTE 0x234 (THIS + 1) // adjust level 1
+			END
+		END ELSE
+		PATCH_IF (class =  15) BEGIN // ct
+			PATCH_IF ((flags & BIT5 = 0) AND (flags & BIT6 = 0)) BEGIN // true multi
+				WRITE_BYTE 0x234 (THIS + 1) // adjust level 1
+			END ELSE
+			PATCH_IF (flags & BIT6 = BIT6) BEGIN // t > c multi
+				WRITE_BYTE 0x235 (THIS + 1) // adjust level 2
+			END
+		END ELSE
+		PATCH_IF ((class =  16) AND (flags & BIT4 = 0)) BEGIN // true multi fd OR f > d dual
+			WRITE_BYTE 0x235 (THIS + 1) // adjust level 2
+		END ELSE
+		PATCH_IF (class =  18) BEGIN // cr
+			WRITE_BYTE 0x235 (THIS + 1) // adjust level 2
+			PATCH_IF ((flags & BIT5 = 0) AND (flags & BIT6 = 0)) BEGIN // true multi
+				WRITE_BYTE 0x234 (THIS + 1) // adjust level 1
+			END
+		END ELSE  
+	
+		// triple classes
+		PATCH_IF ((class = 10) OR     // fighter-mage-thief
+				(class = 17)) BEGIN // fighter-mage-cleric  
+			WRITE_BYTE 0x235 (THIS + 1) // adjust level 2
+			PATCH_IF (class = 17) BEGIN
+				WRITE_BYTE 0x235 (THIS + 1) // adjust level 3
+			END
+		END
+	END
+END
+BUT_ONLY
+
+/////////////////////////////////////////
+///////////////////////////////BEGIN CLASS LORE
+/////////////////////////////////////////
+
+BEGIN ~Lore Scaling~
+DESIGNATED 300
+COPY ~misc_ex/tables/lore.2da~ ~override~
+
+PRETTY_PRINT_2DA
+
+/////////////////////////////////////////
+///////////////////////////////BEGIN PAL/RANG REP
+/////////////////////////////////////////
+
+BEGIN ~Paladin/Ranger Reputation~
+DESIGNATED 305
+COPY ~misc_ex/tables/fallen.2da~ ~override~
+
+PRETTY_PRINT_2DA
+
+/////////////////////////////////////////
+///////////////////////////////BEGIN ENCHANTED RANGED
+/////////////////////////////////////////
+
+BEGIN ~Enchanted Ranged~
+DESIGNATED 310
+
+COPY_EXISTING_REGEXP GLOB ~^.+\.itm~ ~override~
+PATCH_IF (%SOURCE_SIZE% > 0x71) BEGIN
+	READ_SHORT 0x1c type
+	PATCH_IF (type = 0x0f || type = 0x12 || type = 0x1b) BEGIN
+		READ_LONG 0x60 enchantrange
+		PATCH_IF (enchantrange > 0) BEGIN
+			LPF ADD_ITEM_EQEFFECT INT_VAR opcode = 345 target = 1 timing = 2 parameter1 = EVAL enchantrange special = 1 END
+		END
+	END
+END
+BUT_ONLY
+
+/////////////////////////////////////////
+///////////////////////////////BEGIN CONSTITUION
+/////////////////////////////////////////
+
+BEGIN ~Constituion Table~
+DESIGNATED 315
+COPY ~misc_ex/tables/hpconbon.2da~ ~override~
+
+PRETTY_PRINT_2DA
+
+/////////////////////////////////////////
+///////////////////////////////BEGIN KEYBINDS
+/////////////////////////////////////////
+
+BEGIN ~Remove Hotkey from Balthazar~
+DESIGNATED 325
+SUBCOMPONENT ~NPC Hotkeys~
+REQUIRE_PREDICATE (MOD_IS_INSTALLED ~STRATAGEMS/SETUP-STRATAGEMS.TP2~ ~6590~) AND (MOD_IS_INSTALLED ~ASCENSION/ASCENSION.TP2~ ~10~) ~Requires Ascension #10/SCS #6590.~
+
+COPY ~misc_ex/misc/balth2.bcs~ ~override~ // remove hotkey from npc
+
+BEGIN ~Remove Hotkey from Saverok~
+DESIGNATED 326
+SUBCOMPONENT ~NPC Hotkeys~
+REQUIRE_PREDICATE (MOD_IS_INSTALLED ~STRATAGEMS/SETUP-STRATAGEMS.TP2~ ~6590~) AND (MOD_IS_INSTALLED ~ASCENSION/ASCENSION.TP2~ ~0~) ~Requires Ascension #0/SCS #6590.~
+
+COPY ~misc_ex/misc/finsare2.bcs~ ~override~ // remove hotkey from npc
+
+BEGIN ~Remove Hotkey from Balthazar and Saverok~
+DESIGNATED 327
+SUBCOMPONENT ~NPC Hotkeys~
+REQUIRE_PREDICATE (MOD_IS_INSTALLED ~STRATAGEMS/SETUP-STRATAGEMS.TP2~ ~6590~) AND (MOD_IS_INSTALLED ~ASCENSION/ASCENSION.TP2~ ~10~) AND (MOD_IS_INSTALLED ~ASCENSION/ASCENSION.TP2~ ~10~) ~Requires Ascension #0/#10/SCS #6590.~
+
+COPY ~misc_ex/misc/balth2.bcs~ ~override~
+COPY ~misc_ex/misc/finsare2.bcs~ ~override~
+
+BEGIN ~Modified STR/thac0 Tables~
+DESIGNATED 330
+COPY ~misc_ex/tables/STRMOD.2DA~ ~override~
+COPY ~misc_ex/tables/STRMODEX.2DA~ ~override~
+COPY ~misc_ex/tables/THAC0.2DA~ ~override~
+
+/////////////////////////////////////////
+///////////////////////////////BEGIN MISC CHANGES
+/////////////////////////////////////////
+
+BEGIN ~Misc Changes~
+DESIGNATED 400
+
+//REQUIRE_COMPONENT ~STRATAGEMS/SETUP-STRATAGEMS.TP2~ 6030 ~Requires SCS Smarter Mages.~
+
+ACTION_IF FILE_EXISTS_IN_GAME ~dw#clweb.eff~ BEGIN
+
+	COPY_EXISTING  ~spwi101.spl~ ~override~ // grease sound change
+	WRITE_ASCII 0x466 ~eff_m31c~ #8
+	WRITE_ASCII 0x526 ~eff_m31c~ #8
+	WRITE_ASCII 0x5e6 ~eff_m31c~ #8
+	WRITE_ASCII 0x6a6 ~eff_m31c~ #8
+	WRITE_ASCII 0x766 ~eff_m31c~ #8
+	WRITE_ASCII 0x466 ~eff_m31c~ #8
+	WRITE_ASCII 0x826 ~eff_m31c~ #8
+	WRITE_ASCII 0x8e6 ~eff_m31c~ #8
+	WRITE_ASCII 0x9a6 ~eff_m31c~ #8
+	WRITE_ASCII 0xa66 ~eff_m31c~ #8
+	WRITE_ASCII 0xb26 ~eff_m31c~ #8
+	WRITE_ASCII 0xbe6 ~eff_m31c~ #8
+	WRITE_ASCII 0xca6 ~eff_m31c~ #8
+	WRITE_ASCII 0xd66 ~eff_m31c~ #8
+	WRITE_ASCII 0xe26 ~eff_m31c~ #8
+	WRITE_ASCII 0xee6 ~eff_m31c~ #8
+	WRITE_ASCII 0xfa6 ~eff_m31c~ #8
+	WRITE_ASCII 0x1066 ~eff_m31c~ #8
+	WRITE_ASCII 0x1126 ~eff_m31c~ #8
+	WRITE_ASCII 0x11e6 ~eff_m31c~ #8
+	WRITE_ASCII 0x12a6 ~eff_m31c~ #8
+	BUT_ONLY
+
+END
+
+ACTION_IF FILE_EXISTS_IN_GAME ~dw#clweb.eff~ BEGIN
+	COPY_EXISTING ~spwi215.spl~ ~override~ // web nerf
+	READ_BYTE 0xf2 saveb
+	PATCH_IF !(saveb = 0x0) BEGIN
+		WRITE_LONG 0xf2 0
+		WRITE_LONG 0x122 0
+		WRITE_LONG 0x152 0
+		WRITE_LONG 0x182 0
+		WRITE_LONG 0x1b2 0
+		
+		SAY UNIDENTIFIED_DESC~Web
+(Evocation)
+
+Level: 2
+Range: 40 ft.
+Duration: 1 turn
+Casting Time: 2
+Area of Effect: 15-ft. radius
+Saving Throw: Neg.
+
+A Web spell creates a many-layered mass of strong, sticky strands similar to spider webs but far larger and tougher. The Web spell covers a maximum area of about 15 ft. in radius (roughly the same size as a Fireball). Creatures caught within webs, or simply touching them, become stuck among the gluey fibers. Anyone in the area when the spell is cast must roll a Saving Throw vs. Spell. If the Saving Throw is successful, then the creature is free to move out of the area. A failed Saving Throw means the creature is stuck in the webs unable to move. Each round that a creature remains in the web, it must make a Saving Throw or be unable to move.~
+
+	END
+	BUT_ONLY
+END
+
+ACTION_IF FILE_EXISTS_IN_GAME ~dw#mg0.bcs~ BEGIN
+	COPY_EXISTING ~spwi609.spl~ ~override~ // true sight nerf
+	READ_BYTE 0x468 durat
+	PATCH_IF (durat = 0x3c) BEGIN
+		WRITE_SHORT 0x468 ~18~
+		WRITE_SHORT 0x498 ~18~
+		WRITE_SHORT 0x4c8 ~18~
+		WRITE_SHORT 0x4f8 ~18~
+		WRITE_SHORT 0x528 ~18~
+	
+		SAY UNIDENTIFIED_DESC ~True Sight
+(Divination)
+
+Level: 6
+Range: 0
+Duration: 1 turn
+Casting Time: 8
+Area of Effect: 120-ft. radius
+Saving Throw: None 
+
+When this spell is cast, an area roughly 120 ft. in radius around the caster will be affected. Instantly and once per round for 1 turn after this spell is cast, all hostile Illusion/Phantasm spells in the area of effect will be dispelled. The spells that are affected by this are Reflected Image, Invisibility, Mirror Image, magical Non-Detection, Improved Invisibility, Shadow Door, Mislead, Project Image, and Simulacrum. The area of effect is roughly a 120-ft. radius around the caster. The target's Magic Resistance, if any, does not come into effect with this spell. This spell only affects enemies, thus it is unable to dispel invisibility from a party member. Finally, the spell also protects the caster from magical blindness for 3 rounds after it is cast.~
+
+	END
+	BUT_ONLY
+
+	COPY_EXISTING ~sppr505.spl~ ~override~ // true seeing nerf
+	READ_BYTE 0x468 durat
+	PATCH_IF (durat = 0x3c) BEGIN
+		WRITE_SHORT 0x498 ~18~
+		WRITE_SHORT 0x4c8 ~18~
+		WRITE_SHORT 0x4f8 ~18~
+		WRITE_SHORT 0x528 ~18~
+		WRITE_SHORT 0x558 ~18~
+	
+		SAY UNIDENTIFIED_DESC ~True Seeing
+(Divination)
+
+Level: 5
+Sphere: Divination
+Range: 0
+Duration: 1 turn
+Casting Time: 8
+Area of Effect: 120-ft. radius
+Saving Throw: None 
+
+When this spell is cast, an area roughly 120 ft. in radius around the caster will be affected. Instantly and once each round for 1 turn after this spell is cast, all hostile Illusion/Phantasm spells in the area of effect will be dispelled. The spells that are affected by this are Reflected Image, Invisibility, Mirror Image, magical Non-Detection, Improved Invisibility, Shadow Door, Mislead, Project Image, and Simulacrum. The area of effect is roughly a 120-ft. radius around the caster. The target's Magic Resistance, if any, does not come into effect with this spell. This spell only affects enemies; thus, it is unable to dispel the invisibility from a party member. Finally, the spell also protects the caster from magical blindness for 3 rounds after it is cast.~
+
+	END
+	BUT_ONLY
+END
+
+COPY_EXISTING_REGEXP GLOB ~^.+\.cre$~ ~override~ ~^.+\.itm$~ ~override~ ~^.+\.spl$~ ~override~
+
+	LPF CLONE_EFFECT INT_VAR silent = 1  match_opcode = 101  match_target = 1 match_parameter2 = 135 opcode = 318  parameter1 = 0 parameter2 = 0 STR_VAR resource = "SQUIRP" END
+	
+BUT_ONLY
+
+ACTION_IF GAME_IS ~bgee eet~ BEGIN
+
+	COPY ~misc_ex/npcs/y5drizbt.eff~ ~override~
+	COPY ~misc_ex/npcs/bootdriz.itm~ ~override~
+	SAY NAME1 0x8 ~No such index~
+	SAY NAME2 0xc ~No such index~
+	SAY UNIDENTIFIED_DESC 0x50 ~No such index~
+	SAY IDENTIFIED_DESC 0x54 ~No such index~
+	WRITE_ASCII 0xb6 ~y5drizbt~ #8
+	
+	COPY ~misc_ex/npcs/drizzt.bcs~ ~override~
+	COPY ~misc_ex/npcs/gnolldr.bcs~ ~override~
+
+END
+
+ACTION_IF GAME_INCLUDES ~sod~ BEGIN
+
+	COPY_EXISTING ~bdmorent.cre~ ~override~
+	READ_SHORT 0x24 minHP
+	READ_SHORT 0x26 maxHP
+	WRITE_SHORT 0x24 (minHP * 2)
+	WRITE_SHORT 0x26 (maxHP * 2)
+	
+	COPY_EXISTING ~bdmorent.bcs~ ~override~
+	DECOMPILE_AND_PATCH BEGIN
+		REPLACE_TEXTUALLY ~IF\([%WNL%%TAB%].+\)+HasItemEquipedReal\(.*\)~ ~IF%WNL%%TAB%False()~
+	END
+	
+	COPY_EXISTING ~bdbelhif.cre~ ~override~
+	ADD_CRE_ITEM ~BDBELHI1.itm~ #0 #0 #0 ~IDENTIFIED~ ~SHIELD~ EQUIP
+	
+	COPY_EXISTING ~bdbelhi1.itm~ ~override~
+	LPF ADD_ITEM_EQEFFECT INT_VAR opcode = 233 target = 1 parameter1 = 3 parameter2 = 114 timing = 2 END
+	
+END
+
+ACTION_IF GAME_IS ~bg2ee eet~ BEGIN
+
+	COPY_EXISTING ~SHADRA01.cre~ ~override~
+	READ_SHORT 0x24 minHP
+	READ_SHORT 0x26 maxHP
+	WRITE_SHORT 0x24 (minHP * 2)
+	WRITE_SHORT 0x26 (maxHP * 2)
+	
+	COPY_EXISTING ~UDSILVER.cre~ ~override~
+	READ_SHORT 0x24 minHP
+	READ_SHORT 0x26 maxHP
+	WRITE_SHORT 0x24 (minHP + 100)
+	WRITE_SHORT 0x26 (maxHP + 100)
+	ADD_CRE_ITEM ~DRAGSIL1.itm~ #0 #0 #0 ~IDENTIFIED~ ~SHIELD~ EQUIP
+	
+	COPY_EXISTING ~DRAGSIL1.itm~ ~override~
+	LPF ADD_ITEM_EQEFFECT INT_VAR opcode = 233 target = 1 parameter1 = 3 parameter2 = 114 timing = 2 END
+
+END
+
+BEGIN ~Area Transitions & NPCs~
+DESIGNATED 401
+
+COPY_EXISTING_REGEXP ~^.+\.are$~ ~override~
+READ_LONG 0x5c triggeroffset
+READ_SHORT 0x5a triggernumber
+FOR (i = 0; i < triggernumber; ++i) BEGIN
+	SET offset = triggeroffset + (i * 0xc4)
+	READ_SHORT (offset + 0x20) triggertype
+	PATCH_IF (triggertype = 2) BEGIN
+		WRITE_LONG (offset + 0x60) (THIS BAND BNOT(BIT2 + BIT9))
+	END
+END
+BUT_ONLY
+
+/////////////////////////////////////////
+///////////////////////////////BEGIN THIEVERY THRESHOLD
+/////////////////////////////////////////
+
+BEGIN ~Thieved Inventory Items~
+DESIGNATED 405
+COPY ~misc_ex/tables/sltsteal.2da~ ~override~
+
+PRETTY_PRINT_2DA
+
+/////////////////////////////////////////
+///////////////////////////////BEGIN DONATION REP
+/////////////////////////////////////////
+
+BEGIN ~Donation Adjustment~
+DESIGNATED 410
+COPY ~misc_ex/tables/reputati.2da~ ~override~
+
+PRETTY_PRINT_2DA
+
+/////////////////////////////////////////
+///////////////////////////////BEGIN START REP
+/////////////////////////////////////////
+
+BEGIN ~Starting Reputation~
+DESIGNATED 415
+COPY ~misc_ex/tables/repstart.2da~ ~override~
+
+PRETTY_PRINT_2DA
+
+/////////////////////////////////////////
+///////////////////////////////BEGIN REP DISCOUNT
+/////////////////////////////////////////
+
+BEGIN ~Store Discounts~
+DESIGNATED 420
+COPY ~misc_ex/tables/repmodst.2da~ ~override~
+PRETTY_PRINT_2DA
+COPY ~misc_ex/tables/CHRMODST.2DA~ ~override~
+PRETTY_PRINT_2DA
+
+BEGIN ~Remove Identification~
+DESIGNATED 425
+
+COPY_EXISTING_REGEXP GLOB ~^.+\.are$~ ~override~
+LPF DELETE_AREA_ITEM STR_VAR item_to_delete = "SCRL75" END
+
+COPY_EXISTING ~RNDSCROL.2DA~ ~override~ ~RNDTREAS.2DA~ ~override~ ~RNDTRES.2DA~ ~override~ // removes identify from the random treasure loot table
+REPLACE_TEXTUALLY ~SCRL75~ ~*~
+
+PRETTY_PRINT_2DA
+
+COPY_EXISTING ~SCRL75.ITM~ ~override~
+LPF DELETE_ITEM_HEADER INT_VAR header_type = 3 END
+SAY IDENTIFIED_DESC ~This unfinished scroll appears to have various ramblings about an assortment of different items and their properties.~
+
+COPY_EXISTING ~HIDESPL.2DA~ ~override~
+SET noexists = 0
+COUNT_2DA_ROWS 4 rows
+SET amt = rows
+FOR	(i = 0; i < rows; ++i)	BEGIN
+	READ_2DA_ENTRY i 0 4 type
+	PATCH_IF (type STRING_EQUAL_CASE "SPWI110" = 1) BEGIN
+		SET noexists = 1
+		SET i = rows
+	END
+END
+PATCH_IF (noexists = 0) BEGIN
+	INSERT_2DA_ROW 1 4 ~SPWI110 1 0 1~
+END
+FOR	(i = 0; i < rows + 1; ++i)	BEGIN
+	READ_2DA_ENTRY i 0 4 type
+	READ_2DA_ENTRY i 1 4 value1
+	READ_2DA_ENTRY i 2 4 value2
+	READ_2DA_ENTRY i 3 4 value3
+	TO_UPPER "%type%"
+	DEFINE_ASSOCIATIVE_ARRAY new2da BEGIN
+		"%type%" => "%value1% %value2% %value3%"
+	END
+END
+REPLACE_TEXTUALLY ~\(IS_REMOVED\)\([%WNL%]*.*\)*~ ~\1%WNL%~
+
+SORT_ARRAY_INDICES new2da LEXICOGRAPHICALLY
+
+PATCH_PHP_EACH new2da AS newsort => newvalue BEGIN
+	INSERT_2DA_ROW 0 4 ~%newsort% %newvalue%~
+END
+PRETTY_PRINT_2DA
+
+
+COPY_EXISTING_REGEXP GLOB ~^.+\.cre$~ ~override~
+PATCH_IF GAME_INCLUDES ~bg1~ BEGIN
+	PATCH_IF ("%SOURCE_FILE%" STRING_EQUAL_CASE "TETHTO.CRE" = 1 OR "%SOURCE_FILE%" STRING_EQUAL_CASE "TETHTO2.CRE" = 1) BEGIN
+	END ELSE
+	REMOVE_CRE_ITEM ~SCRL75~
+END ELSE BEGIN
+	REMOVE_CRE_ITEM ~SCRL75~
+END
+
+COPY_EXISTING ~ITEMSPEC.2DA~ ~override~
+REPLACE_TEXTUALLY ~\(IDENTIFY\)\([%WNL%].*\)*~ ~\1~
+
+ACTION_IF GAME_INCLUDES ~sod~ BEGIN
+	COPY_EXISTING ~BDCLCK06.ITM~ ~override~
+	READ_LONG 0x64 abil_off
+	READ_SHORT 0x68 abil_num
+	READ_LONG 0x6a effect_off
+	FOR	(i = 0; i < abil_num; ++i)	BEGIN
+		READ_SHORT (abil_off+i*0x38+0x1e) spell_num
+		READ_SHORT (abil_off+i*0x38+0x20) spell_index
+		FOR	(j = 0; j < spell_num; ++j)	BEGIN
+			READ_SHORT ((effect_off+(j+spell_index)*0x30)) opcode
+			READ_ASCII ((effect_off+(j+spell_index)*0x30)+0x14) resource
+			PATCH_IF (opcode = 122 AND "%resource%" STRING_EQUAL_CASE "SCRL75" = 1) BEGIN
+				WRITE_ASCII ((effect_off+(j+spell_index)*0x30)+0x14) "SCRL6D" #8
+			END
+		END
+	END
+	COPY_EXISTING ~BDMIRR01.ITM~ ~override~
+	SAY UNIDENTIFIED_DESC ~The town of Soubar has earned its reputation as a lawless and dangerous place. The rampant brigandry in the area means a great many stolen goods are funneled through Soubar's back rooms and inns. One of the town's residents, the halfling Gentrus, crafted this mirror. After a close call with a wererat, Gentrus decided to leave Soubar for the safety of Baldur's Gate, joining a caravan traveling north. The halfling died on the road during a bandit attack, but the caravan's survivors drove off the bandits. They ensured Gentrus's body and possessions made it to his relatives.
+	
+	Weight: 1~
+	LPF DELETE_ITEM_HEADER INT_VAR header_type = 3 END
+END
+
+ACTION_IF GAME_INCLUDES ~bg2~ BEGIN
+	COPY_EXISTING ~MISC3P.ITM~ ~override~
+	SAY NAME1 ~Oddly Shaped Glasses~
+	SAY NAME2 ~Oddly Shaped Glasses~
+	SAY UNIDENTIFIED_DESC ~These glasses appear to have little use.
+	
+	Weight: 0
+	~
+	LPF DELETE_ITEM_HEADER INT_VAR header_type = 3 END
+END
+
+/////////////////////////////////////////
+///////////////////////////////BEGIN HLA/CELESTIALS
+/////////////////////////////////////////
+
+BEGIN ~High Level Ability Table~
+DESIGNATED 500
+
+//spell effects added
+
+LAF    ADD_SPLSTATE    STR_VAR    label = ~Y5WARCRY~    RET    y5hla1 = new_ids    END
+LAF    ADD_SPLSTATE    STR_VAR    label = ~Y5EFFCS~    RET    y5arc1 = new_ids    END
+LAF    ADD_SPLSTATE    STR_VAR    label = ~Y5MAGIC1~    RET    y5e1 = new_ids    END
+LAF    ADD_SPLSTATE    STR_VAR    label = ~Y5MAGIC2~    RET    y5e2 = new_ids    END
+LAF    ADD_SPLSTATE    STR_VAR    label = ~Y5MAGIC3~    RET    y5e3 = new_ids    END
+LAF    ADD_SPLSTATE    STR_VAR    label = ~Y5MAGIC4~    RET    y5e4 = new_ids    END
+LAF    ADD_SPLSTATE    STR_VAR    label = ~Y5MAGIC5~    RET    y5e5 = new_ids    END
+LAF    ADD_SPLSTATE    STR_VAR    label = ~Y5MAGIC6~    RET    y5e6 = new_ids    END
+LAF    ADD_SPLSTATE    STR_VAR    label = ~Y5ARMED~    RET    y5equip = new_ids    END
+
+LAF ADD_SPLPROT INT_VAR type = 88 range = (0 - 1) equalto = 0 STR_VAR label = ~Y5STONESKIN~  RET Y5STONE = new_splprot END
+
+COPY_EXISTING ~SPLPROT.2DA~ ~override~
+PRETTY_PRINT_2DA
+
+CREATE EFF ~Y5408EFF~
+WRITE_LONG 0x10 326
+WRITE_LONG 0x14 2
+WRITE_LONG 0x1c 1
+WRITE_LONG 0x20 ~%Y5STONE%~
+WRITE_SHORT 0x2c 100
+WRITE_ASCII 0x30 ~Y5408SP2~ #8
+WRITE_ASCII 0x94 ~Y5408SP1~ #8
+
+COPY ~misc_ex/spclass/Y5408SP1.SPL~ ~override~
+WRITE_ASCII 0xae ~Y5408EFF~ #8
+
+WRITE_ASCII 0xde ~Y5WHIRL0~ #8
+WRITE_ASCII 0x10e ~Y5WHIRL1~ #8
+WRITE_ASCII 0x13e ~Y5WHIRL2~ #8
+WRITE_ASCII 0x16e ~Y5WHIRL3~ #8
+WRITE_ASCII 0x19e ~Y5WHIRL4~ #8
+WRITE_ASCII 0x1ce ~Y5WHIRL5~ #8
+WRITE_ASCII 0x1fe ~Y5WHIRL6~ #8
+
+COPY ~misc_ex/spclass/Y5408SP2.SPL~ ~override~
+WRITE_ASCII 0xae ~Y5408SP1~ #8
+
+
+ACTION_DEFINE_ASSOCIATIVE_ARRAY enchant_param2_map BEGIN
+
+	~%y5e0%~ => 0 // p2 value for +0 enchantment
+	~%y5e1%~ => 1 // p2 value for +1 enchantment
+	~%y5e2%~ => 2 // p2 value for +2 enchantment
+	~%y5e3%~ => 3 // p2 value for +3 enchantment
+	~%y5e4%~ => 4 // p2 value for +4 enchantment
+	~%y5e5%~ => 5 // p2 value for +5 enchantment
+	~%y5e6%~ => 6 // p2 value for +6 enchantment
+
+END     
+
+//Adds enchant parameters to items and gives daggers 1 range
+COPY_EXISTING_REGEXP GLOB ~^.+\.itm$~ ~override~
+READ_SHORT 0x1c weapon
+PATCH_IF ((weapon > 14) AND (weapon < 31)) BEGIN
+	READ_LONG 0x60 enchant
+	PATCH_PHP_EACH enchant_param2_map AS p2 => enchantment BEGIN
+		PATCH_IF enchant = enchantment BEGIN
+			PATCH_IF (enchant = 1) BEGIN
+				LPF ADD_ITEM_EQEFFECT INT_VAR opcode = 328 target = 1 parameter2 = %y5equip% timing = 2 resist_dispel = 2 special = 1 END
+				LPF ADD_ITEM_EQEFFECT INT_VAR opcode = 328 target = 1 parameter2 = %p2% timing = 2 resist_dispel = 2 special = 1 END
+			END ELSE  
+			PATCH_IF (enchant = 2) BEGIN
+				LPF ADD_ITEM_EQEFFECT INT_VAR opcode = 328 target = 1 parameter2 = %y5equip% timing = 2 resist_dispel = 2 special = 1 END
+				LPF ADD_ITEM_EQEFFECT INT_VAR opcode = 328 target = 1 parameter2 = %p2% timing = 2 resist_dispel = 2 special = 1 END
+			END ELSE  
+			PATCH_IF (enchant = 3) BEGIN
+				LPF ADD_ITEM_EQEFFECT INT_VAR opcode = 328 target = 1 parameter2 = %y5equip% timing = 2 resist_dispel = 2 special = 1 END
+				LPF ADD_ITEM_EQEFFECT INT_VAR opcode = 328 target = 1 parameter2 = %p2% timing = 2 resist_dispel = 2 special = 1 END
+			END ELSE  
+			PATCH_IF (enchant = 4) BEGIN
+				LPF ADD_ITEM_EQEFFECT INT_VAR opcode = 328 target = 1 parameter2 = %y5equip% timing = 2 resist_dispel = 2 special = 1 END
+				LPF ADD_ITEM_EQEFFECT INT_VAR opcode = 328 target = 1 parameter2 = %p2% timing = 2 resist_dispel = 2 special = 1 END
+			END ELSE  
+			PATCH_IF (enchant = 5) BEGIN
+				LPF ADD_ITEM_EQEFFECT INT_VAR opcode = 328 target = 1 parameter2 = %y5equip% timing = 2 resist_dispel = 2 special = 1 END
+				LPF ADD_ITEM_EQEFFECT INT_VAR opcode = 328 target = 1 parameter2 = %p2% timing = 2 resist_dispel = 2 special = 1 END
+			END ELSE  
+			PATCH_IF (enchant = 6) BEGIN
+				LPF ADD_ITEM_EQEFFECT INT_VAR opcode = 328 target = 1 parameter2 = %y5equip% timing = 2 resist_dispel = 2 special = 1 END
+				LPF ADD_ITEM_EQEFFECT INT_VAR opcode = 328 target = 1 parameter2 = %p2% timing = 2 resist_dispel = 2 special = 1 END
+			END ELSE
+			PATCH_IF (weapon = 16) BEGIN
+				LPF ALTER_ITEM_HEADER INT_VAR header_type = 1 range = 1 END
+			END
+		END	
+	END
+END  
+BUT_ONLY
+
+//warrior spells and projectile
+
+COPY ~misc_ex/spclwar/whirlwind/Y5900WX.BAM~ ~override~
+COPY ~misc_ex/spclwar/whirlwind/Y5900GE.vvc~ ~override~
+WRITE_ASCII 0x08 ~Y5900WX~ #8
+
+ADD_PROJECTILE ~misc_ex/spclwar/Y5WHIRL.pro~
+COPY_EXISTING ~Y5WHIRL.pro~ ~override~
+WRITE_ASCII 0x21c ~Y5900GE~ #8
+
+COPY ~misc_ex/spclwar/Y5WHIRL0.spl~ ~override~
+WRITE_SHORT 0x98 ~%Y5WHIRL%~
+
+COPY ~misc_ex/spclwar/Y5WHIRL1.spl~ ~override~
+WRITE_SHORT 0x98 ~%Y5WHIRL%~
+
+COPY ~misc_ex/spclwar/Y5WHIRL2.spl~ ~override~
+WRITE_SHORT 0x98 ~%Y5WHIRL%~
+
+COPY ~misc_ex/spclwar/Y5WHIRL3.spl~ ~override~
+WRITE_SHORT 0x98 ~%Y5WHIRL%~
+
+COPY ~misc_ex/spclwar/Y5WHIRL4.spl~ ~override~
+WRITE_SHORT 0x98 ~%Y5WHIRL%~
+
+COPY ~misc_ex/spclwar/Y5WHIRL5.spl~ ~override~
+WRITE_SHORT 0x98 ~%Y5WHIRL%~
+
+COPY ~misc_ex/spclwar/Y5WHIRL6.spl~ ~override~
+WRITE_SHORT 0x98 ~%Y5WHIRL%~
+
+
+//gives immunity to all spells that already had immunity from applied spell
+
+COPY_EXISTING_REGEXP GLOB ~^.+\.cre$~ ~override~ ~^.+\.itm$~ ~override~ ~^.+\.spl$~ ~override~				  
+	LPF CLONE_EFFECT INT_VAR silent = 1  match_opcode = 120 match_parameter1 = 0 match_target = 1 opcode = 318 power = 0 parameter1 = 0 parameter2 = 0 STR_VAR resource = "Y5WHIRL0" END
+	
+	LPF CLONE_EFFECT INT_VAR silent = 1  match_opcode = 120 match_parameter1 = 1 match_target = 1 opcode = 318 power = 0 parameter1 = 0 parameter2 = 0 STR_VAR resource = "Y5WHIRL1" END
+	
+	LPF CLONE_EFFECT INT_VAR silent = 1  match_opcode = 120 match_parameter1 = 2 match_target = 1 opcode = 318 power = 0 parameter1 = 0 parameter2 = 0 STR_VAR resource = "Y5WHIRL2" END
+	
+	LPF CLONE_EFFECT INT_VAR silent = 1  match_opcode = 120 match_parameter1 = 3 match_target = 1 opcode = 318 power = 0 parameter1 = 0 parameter2 = 0 STR_VAR resource = "Y5WHIRL3" END
+	
+	LPF CLONE_EFFECT INT_VAR silent = 1  match_opcode = 120 match_parameter1 = 4 match_target = 1 opcode = 318 power = 0 parameter1 = 0 parameter2 = 0 STR_VAR resource = "Y5WHIRL4" END
+	
+	LPF CLONE_EFFECT INT_VAR silent = 1  match_opcode = 120 match_parameter1 = 5 match_target = 1 opcode = 318 power = 0 parameter1 = 0 parameter2 = 0 STR_VAR resource = "Y5WHIRL5" END
+	
+	LPF CLONE_EFFECT INT_VAR silent = 1  match_opcode = 120 match_parameter1 = 6 match_target = 1 opcode = 318 power = 0 parameter1 = 0 parameter2 = 0 STR_VAR resource = "Y5WHIRL6" END
+	
+	LPF CLONE_EFFECT INT_VAR silent = 1  match_opcode = 120 match_parameter1 = 6 match_target = 1 opcode = 318 power = 0 parameter1 = 0 parameter2 = 0 STR_VAR resource = "Y5WHIRL6" END
+	
+	LPF CLONE_EFFECT INT_VAR silent = 1  match_opcode = 206 opcode = 321 parameter1 = 0 parameter2 = 0 duration = 0 STR_VAR match_resource = "SPWI312" resource = "Y5ARC318" END
+	
+	LPF CLONE_EFFECT INT_VAR silent = 1  match_opcode = 206 opcode = 321 parameter1 = 0 parameter2 = 0 duration = 0 STR_VAR match_resource = "SPWI312" resource = "SPCL908" END
+
+	LPF CLONE_EFFECT INT_VAR silent = 1  match_opcode = 206 STR_VAR match_resource = "SPWI312" resource = "Y5ARC318" END
+
+	LPF CLONE_EFFECT INT_VAR silent = 1  match_opcode = 206 STR_VAR match_resource = "SPWI312" resource = "SPCL908" END
+	
+	LPF CLONE_EFFECT INT_VAR silent = 1  match_opcode = 101 match_parameter2 = 40 opcode = 318 parameter1 = 0 parameter2 = 0 STR_VAR resource = "Y5ARC318" END
+	
+	LPF CLONE_EFFECT INT_VAR silent = 1  match_opcode = 101 match_parameter2 = 40 opcode = 318 parameter1 = 0 parameter2 = 0 STR_VAR resource = "SPCL908" END
+
+	LPF CLONE_EFFECT INT_VAR silent = 1  match_opcode = 16 opcode = 321 parameter1 = 0 parameter2 = 0 duration = 0 STR_VAR resource = "Y5ARC318" END
+	
+	LPF CLONE_EFFECT INT_VAR silent = 1  match_opcode = 16 opcode = 321 parameter1 = 0 parameter2 = 0 duration = 0 STR_VAR resource = "SPCL908" END
+	
+	LPF CLONE_EFFECT INT_VAR silent = 1  match_opcode = 218  match_target = 1 opcode = 146  parameter1 = 0 parameter2 = 1 duration = 0 STR_VAR insert = below resource = "Y5408SP1" END
+	
+	LPF CLONE_EFFECT INT_VAR silent = 1  match_opcode = 218  match_target = 1 opcode = 321  parameter1 = 0 parameter2 = 0 timing = 0 resist_dispel = 2 duration = 0 STR_VAR insert = below resource = "Y5408SP1" END
+	
+	LPF CLONE_EFFECT INT_VAR silent = 1  match_opcode = 218  match_target = 1 opcode = 337  parameter1 = (0 - 1) parameter2 = 218 timing = 0 resist_dispel = 2 duration = 0 END
+	
+BUT_ONLY
+
+COPY_EXISTING ~spwi408.spl~ ~override~
+
+	SAY UNIDENTIFIED_DESC ~Stoneskin
+(Alteration)
+
+Level: 4
+Range: 0
+Duration: 12 hours
+Casting Time: 1
+Area of Effect: The caster
+Saving Throw: None 
+
+When a wizard casts this powerful spell upon <PRO_HIMHER>self, an outer skin of stone will move up from the ground, completely covering <PRO_HIMHER>. This skin is of course magical and will hinder the wizard in no way. The effect of this is to protect the wizard from physical attacks such as melee weapons and projectiles. For every 2 levels of the caster, an additional skin is gained upon casting. For example, a 10th-level wizard would receive 5 skins while a 20th-level wizard would receive 10. For each skin the wizard possesses, the spell will stop one attack, so a 10th-level wizard would be protected from the first 5 attacks made against <PRO_HIMHER>, but the 6th would affect <PRO_HIMHER> normally. The skins will remain on the wizard until <PRO_HESHE> is affected by a Dispel Magic, all of the skins are removed due to physical attacks, or the spell duration expires. It is important to note that this will not protect the wizard from any magical attacks, such as Fireball. This spell grants immunity to all forms of Whirlwind while there is at least one layer of protection left.~
+
+COPY ~misc_ex/tables/lunumab.2da~ ~override~
+
+PRETTY_PRINT_2DA
+
+COPY ~misc_ex/creature_scs~ ~override~
+COPY ~misc_ex/spclrog/spcl916.spl~ ~override~
+
+/////////////////////////////////////////
+///////////////////////////////BEGIN ROGUE INNATES
+/////////////////////////////////////////
+
+COPY ~misc_ex/spclrog/spcl917.spl~ ~override~
+	SAY NAME1 ~Avoid Death~
+
+	SAY UNIDENTIFIED_DESC ~Avoid Death
+This ability allows the rogue to avoid almost certain death. The effect lasts for 5 rounds, and during this time, the rogue's Save vs. Death receives a bonus of 5, Hit Points are increased by 20, and the rogue becomes immune to death magic.
+
+
+Lv12+:
+Free Action for 3 rounds. While under the effects of this spell, the recipient becomes immune to anything that affects <PRO_HISHER> movement. This includes the effects of Web, Hold Person, Grease, and Entangle.~
+
+
+COPY ~misc_ex/spclrog/spcl902.eff~ ~override~
+COPY ~misc_ex/spclrog/spcl902a.eff~ ~override~
+COPY ~misc_ex/spclrog/spcl913.spl~ ~override~
+	SAY NAME1 ~Quick Attacks~
+
+	SAY UNIDENTIFIED_DESC ~Quick Attacks
+	
+Using extra force(+1 APR) and accuracy(+3 Thac0), succesful hits stagger(Blind) the enemy(Save vs. Death, -2). Reducing their range for 2 rounds. 
+
+Lasts 3 rounds.~
+
+COPY ~misc_ex/spclrog/spcl914.spl~ ~override~
+	SAY NAME1 ~Evasion~
+
+	SAY UNIDENTIFIED_DESC ~Evasion
+	
+This ability improves Armor Class and Saving Throws. In addition, Evasion allows the rogue to move so quickly that <PRO_HISHER> movement rate is increased by 2 (base is 9) and normal missiles have no chance of striking <PRO_HIMHER>. Evasion lasts for 5 rounds.
+
+The Rogues advanced experience allows them to enter stealth(Invisibility) for 3 rounds.
+
+LEVEL	AC	SAVING THROWS
+1+		+1		+1
+9+		+2		+1
+12+		+3		+2
+15+		+5		+3
+
+Requires: Quick Attacks.~
+
+
+
+COPY ~misc_ex/spclrog/trapsnar.pro~  ~override~// regular rogue trap
+
+COPY ~misc_ex/spclrog/rogtspk.bam~ ~override~
+COPY ~misc_ex/spclrog/spcl910.spl~ ~override~
+	SAY NAME1 ~Set Spike Trap~
+
+	SAY UNIDENTIFIED_DESC ~Set Spike Trap
+	
+	Casting Time: 5
+	Area of Effect: 1 creature
+	Saving Throw: Negates effects.
+	
+The rogue sets up a preconfigured spike trap(5ft range) that is not friendly and triggers within a 2.5ft radius.
+
+Paralyzes(3 rounds, save vs death negates) and damages target on succesful hit.
+
+Lv1+:10d6
+Lv4+:11d6
+Lv6+:12d6
+Lv8+:13d6
+Lv10+:14d6
+Lv12+:15d6
+Lv14+:16d6
+Lv16+:17d6.~
+
+
+
+COPY ~misc_ex/spclrog/rogtexp.bam~ ~override~
+COPY ~misc_ex/spclrog/spcl911.spl~ ~override~
+	SAY NAME1 ~Set Exploding Trap~
+
+	SAY UNIDENTIFIED_DESC ~Set Exploding Trap
+	
+	Casting Time: 5
+	Area of Effect: 16-ft radius.
+	Saving Throw: 1/2
+	
+This ability allows the rogue to set a preconfigured exploding trap(5ft range) that is not friendly and triggers within a 2.5ft radius, with a 16ft explosion radius.
+
+Knocks back targets(Wing Buffet, STR 20), and temporarily puts targets to sleep for 3 seconds.
+
+Lv1+:4d6 (Save vs. Breath for half damage)
+
+Lv5+: Adds 1d6+ damage per level up to level 12, for a total of 12d6 damage.~
+
+
+COPY ~misc_ex/spclrog/rogtdis.bam~ ~override~
+COPY ~misc_ex/spclrog/spcl912.spl~ ~override~
+	SAY NAME1 ~Set Dispel Trap~
+
+	SAY UNIDENTIFIED_DESC ~Set Dispel Trap
+	
+	Casting Time: 5
+	Area of Effect: 16-ft radius.
+	Saving Throw: Neg.
+	
+This trap(5ft range) is not party friendly and triggers within a 2.5ft radius, with a 16ft explosion radius.
+
+This trap will dispel the magic off any target unless their Save vs. Breath succeeds at 1.5x the level of the rogue rounding up and capping at level 20.~
+
+
+ADD_PROJECTILE ~misc_ex/spclrog/rogtspk.pro~
+COPY_EXISTING ~spcl910.spl~ ~override~
+WRITE_SHORT 0x98 ~%rogtspk%~
+WRITE_SHORT 0xc0 ~%rogtspk%~
+WRITE_SHORT 0xe8 ~%rogtspk%~
+WRITE_SHORT 0x110 ~%rogtspk%~
+WRITE_SHORT 0x138 ~%rogtspk%~
+WRITE_SHORT 0x160 ~%rogtspk%~
+WRITE_SHORT 0x188 ~%rogtspk%~
+WRITE_SHORT 0x1b0 ~%rogtspk%~
+
+ADD_PROJECTILE ~misc_ex/spclrog/rogtexp.pro~
+COPY_EXISTING ~spcl911.spl~ ~override~
+WRITE_SHORT 0x98  ~%rogtexp%~
+WRITE_SHORT 0xc0  ~%rogtexp%~
+WRITE_SHORT 0xe8  ~%rogtexp%~
+WRITE_SHORT 0x110 ~%rogtexp%~
+WRITE_SHORT 0x138 ~%rogtexp%~
+WRITE_SHORT 0x160 ~%rogtexp%~
+WRITE_SHORT 0x188 ~%rogtexp%~
+WRITE_SHORT 0x1b0 ~%rogtexp%~
+WRITE_SHORT 0x1d8 ~%rogtexp%~
+
+ADD_PROJECTILE ~misc_ex/spclrog/rogtdis.pro~
+COPY_EXISTING ~spcl912.spl~ ~override~
+WRITE_SHORT 0x98 ~%rogtdis%~
+WRITE_SHORT 0xc0 ~%rogtdis%~
+WRITE_SHORT 0xe8 ~%rogtdis%~
+WRITE_SHORT 0x110 ~%rogtdis%~
+WRITE_SHORT 0x138 ~%rogtdis%~
+WRITE_SHORT 0x160 ~%rogtdis%~
+WRITE_SHORT 0x188 ~%rogtdis%~
+WRITE_SHORT 0x1b0 ~%rogtdis%~
+WRITE_SHORT 0x1d8 ~%rogtdis%~
+WRITE_SHORT 0x200 ~%rogtdis%~
+WRITE_SHORT 0x228 ~%rogtdis%~
+WRITE_SHORT 0x250 ~%rogtdis%~
+WRITE_SHORT 0x278 ~%rogtdis%~
+WRITE_SHORT 0x2a0 ~%rogtdis%~
+WRITE_SHORT 0x2c8 ~%rogtdis%~
+WRITE_SHORT 0x2f0 ~%rogtdis%~
+WRITE_SHORT 0x318 ~%rogtdis%~
+WRITE_SHORT 0x340 ~%rogtdis%~
+WRITE_SHORT 0x368 ~%rogtdis%~
+WRITE_SHORT 0x390 ~%rogtdis%~
+
+COPY_EXISTING ~rogtspk.pro~ ~override~
+	WRITE_ASCII 0x104 ~rogtspk~ #8
+	
+COPY_EXISTING ~rogtexp.pro~ ~override~
+	WRITE_ASCII 0x104 ~rogtexp~ #8
+	
+COPY_EXISTING ~rogtdis.pro~ ~override~
+	WRITE_ASCII 0x104 ~rogtdis~ #8
+	
+COPY_EXISTING ~spcl915.spl~ ~override~
+SAY NAME1 ~Use Any Item~
+SAY UNIDENTIFIED_DESC ~Use Any Item
+
+Rogues take pride in their ability to adapt and make clever use of whatever is at hand. This ability is an extension of that basic skill. Once learned, the effect is permanent. The ability allows the rogue to use any item, even items that are typically restricted to one class. This allows the rogue to use everything from wands and scrolls to mighty weapons that none but a warrior could otherwise use.
+
+UAI does not override restrictions on ability scores, or ability equipment restrictions; the rogue still may not use thieving abilities while wearing heavy armor, may not cast wizard spells while wearing any armor, and may not backstab with weapons outside of the normal single-class thief pool. The rogue must still have 9 intelligence to use scrolls, 18 strength to use composite longbows, etc.
+
+Specialist mages gain the ability to cast scrolls from their opposition school, but still may not scribe them.
+
+Note: This will not allow use of most NPC personal items.~
+
+
+/////////////////////////////////////////
+///////////////////////////////BEGIN WARRIOR INNATES
+/////////////////////////////////////////
+
+COPY ~misc_ex/spclwar/whirlwind/Y5C2M1.spl~ ~override~
+LPF ADD_SPELL_EFFECT INT_VAR opcode = 326 target = 1 parameter2 = 111 parameter1 = %y5e2% resist_dispel = 2 STR_VAR resource = "Y5C3M1" END
+
+COPY ~misc_ex/spclwar/whirlwind/Y5C3M1.spl~ ~override~
+LPF ADD_SPELL_EFFECT INT_VAR opcode = 326 target = 1 parameter2 = 111 parameter1 = %y5e3% resist_dispel = 2 STR_VAR resource = "Y5C4M1" END
+
+COPY ~misc_ex/spclwar/whirlwind/Y5C4M1.spl~ ~override~
+LPF ADD_SPELL_EFFECT INT_VAR opcode = 326 target = 1 parameter2 = 111 parameter1 = %y5e4% resist_dispel = 2 STR_VAR resource = "Y5C5M1" END
+
+COPY ~misc_ex/spclwar/whirlwind/Y5C5M1.spl~ ~override~
+LPF ADD_SPELL_EFFECT INT_VAR opcode = 326 target = 1 parameter2 = 111 parameter1 = %y5e5% resist_dispel = 2 STR_VAR resource = "Y5C6M1" END
+
+COPY ~misc_ex/spclwar/whirlwind/Y5C6M1.spl~ ~override~
+LPF ADD_SPELL_EFFECT INT_VAR opcode = 326 target = 1 parameter2 = 111 parameter1 = %y5e6% resist_dispel = 2 STR_VAR resource = "Y5WHIRL1" END
+
+
+
+COPY ~misc_ex/spclwar/whirlwind/Y5C3M2.spl~ ~override~
+LPF ADD_SPELL_EFFECT INT_VAR opcode = 326 target = 1 parameter2 = 111 parameter1 = %y5e3% resist_dispel = 2 STR_VAR resource = "Y5C4M2" END
+
+COPY ~misc_ex/spclwar/whirlwind/Y5C4M2.spl~ ~override~
+LPF ADD_SPELL_EFFECT INT_VAR opcode = 326 target = 1 parameter2 = 111 parameter1 = %y5e4% resist_dispel = 2 STR_VAR resource = "Y5C5M2" END
+
+COPY ~misc_ex/spclwar/whirlwind/Y5C5M2.spl~ ~override~
+LPF ADD_SPELL_EFFECT INT_VAR opcode = 326 target = 1 parameter2 = 111 parameter1 = %y5e5% resist_dispel = 2 STR_VAR resource = "Y5C6M2" END
+
+COPY ~misc_ex/spclwar/whirlwind/Y5C6M2.spl~ ~override~
+LPF ADD_SPELL_EFFECT INT_VAR opcode = 326 target = 1 parameter2 = 111 parameter1 = %y5e6% resist_dispel = 2 STR_VAR resource = "Y5WHIRL2" END
+
+
+
+COPY ~misc_ex/spclwar/whirlwind/Y5C4M3.spl~ ~override~
+LPF ADD_SPELL_EFFECT INT_VAR opcode = 326 target = 1 parameter2 = 111 parameter1 = %y5e4% resist_dispel = 2 STR_VAR resource = "Y5C5M3" END
+
+COPY ~misc_ex/spclwar/whirlwind/Y5C5M3.spl~ ~override~
+LPF ADD_SPELL_EFFECT INT_VAR opcode = 326 target = 1 parameter2 = 111 parameter1 = %y5e5% resist_dispel = 2 STR_VAR resource = "Y5C6M3" END
+
+COPY ~misc_ex/spclwar/whirlwind/Y5C6M3.spl~ ~override~
+LPF ADD_SPELL_EFFECT INT_VAR opcode = 326 target = 1 parameter2 = 111 parameter1 = %y5e6% resist_dispel = 2 STR_VAR resource = "Y5WHIRL3" END
+
+
+
+COPY ~misc_ex/spclwar/whirlwind/Y5C5M4.spl~ ~override~
+LPF ADD_SPELL_EFFECT INT_VAR opcode = 326 target = 1 parameter2 = 111 parameter1 = %y5e5% resist_dispel = 2 STR_VAR resource = "Y5C6M4" END
+
+COPY ~misc_ex/spclwar/whirlwind/Y5C6M4.spl~ ~override~
+LPF ADD_SPELL_EFFECT INT_VAR opcode = 326 target = 1 parameter2 = 111 parameter1 = %y5e6% resist_dispel = 2 STR_VAR resource = "Y5WHIRL4" END
+
+
+
+COPY ~misc_ex/spclwar/whirlwind/Y5C6M5.spl~ ~override~
+LPF ADD_SPELL_EFFECT INT_VAR opcode = 326 target = 1 parameter2 = 111 parameter1 = %y5e6% resist_dispel = 2 STR_VAR resource = "Y5WHIRL5" END
+
+
+COPY ~misc_ex/spclwar/SPCL900.spl~ ~override~
+	SAY NAME1 ~Whirlwind Attack~
+	
+	SAY UNIDENTIFIED_DESC ~Whirlwind Attack
+	
+Saving Throw: vs. Breath for 1/2
+	
+This ability allows the warrior to provide a devastating AoE(8ft radius), party friendly crushing attack with a penalty of -2 to enemies. Spells, items, or creatures that are naturally immune to a specifc weapon enchantment will also be immune to this ability.
+
+Weapon enchantment will determine the damage of this spell.
+
+Enchantment:
+
+0 - 1d10
+1 - 2d7
+2 - 2d7
+3 - 3d10
+4 - 4d10
+5 - 6d10
+6 - 7d10~
+
+LPF ADD_SPELL_EFFECT INT_VAR opcode = 326 target = 1 parameter2 = 111 parameter1 = %y5equip% resist_dispel = 2 STR_VAR resource = "Y5WHIRL0" END
+LPF ADD_SPELL_EFFECT INT_VAR opcode = 326 target = 1 parameter2 = 110 parameter1 = %y5e1% resist_dispel = 2 STR_VAR resource = "Y5C2M1" END
+LPF ADD_SPELL_EFFECT INT_VAR opcode = 326 target = 1 parameter2 = 110 parameter1 = %y5e2% resist_dispel = 2 STR_VAR resource = "Y5C3M2" END
+LPF ADD_SPELL_EFFECT INT_VAR opcode = 326 target = 1 parameter2 = 110 parameter1 = %y5e3% resist_dispel = 2 STR_VAR resource = "Y5C4M3" END
+LPF ADD_SPELL_EFFECT INT_VAR opcode = 326 target = 1 parameter2 = 110 parameter1 = %y5e4% resist_dispel = 2 STR_VAR resource = "Y5C5M4" END
+LPF ADD_SPELL_EFFECT INT_VAR opcode = 326 target = 1 parameter2 = 110 parameter1 = %y5e5% resist_dispel = 2 STR_VAR resource = "Y5C6M5" END
+LPF ADD_SPELL_EFFECT INT_VAR opcode = 326 target = 1 parameter2 = 110 parameter1 = %y5e6% resist_dispel = 2 STR_VAR resource = "Y5WHIRL6" END
+
+
+
+COPY ~misc_ex/spclwar/spcl901.spl~ ~override~
+	SAY NAME1 ~Greater Whirlwind Attack~
+
+	SAY UNIDENTIFIED_DESC ~Greater Whirlwind Attack
+The warriors attacks are increased to 10 per round while receiving a movement speed increase. Lasts for 2 rounds with a -2 penalty to thac0.
+
+Requires: Whirlwind Attack~
+
+COPY ~misc_ex/spclwar/Y5902.spl~ ~override~
+	SAY NAME1 ~~
+	
+	SAY UNIDENTIFIED_DESC ~~
+
+COPY ~misc_ex/spclwar/spcl902.spl~ ~override~
+	SAY NAME1 ~Deathblow~
+
+	SAY UNIDENTIFIED_DESC ~Deathblow
+The Deathblow ability allows the warior to become enraged, dealing additional damage. Lasts 5 rounds.
+
+Effects:
+Beserker rage.
+
+Damage Bonus: (non cumulative)
+Lv1+: +1.
+Lv5+: +2.
+Lv15+: +3.~
+
+WRITE_ASCII 0x13e ~Y5902~ #8
+
+COPY ~misc_ex/spclwar/spcl903.eff~ ~override~
+COPY ~misc_ex/spclwar/spcl903c.eff~ ~override~
+COPY ~misc_ex/spclwar/spcl903.spl~ ~override~
+	SAY NAME1 ~Greater Deathblow~
+
+	SAY UNIDENTIFIED_DESC ~Greater Deathblow
+	
+Saving Throw: Special
+	
+For 2 rounds, attacks by the warrior are made with such force (-2 penalty to thac0) that they dispel (vs. Breath negates) the magic on their target on successful hits. In addition, each successful hit will lower the target's vs. Breath by 1 for 1.5 rounds, there is no save against this effect.
+
+Requires: Deathblow~
+
+WRITE_ASCII 0xde ~spcl903c~ #8
+WRITE_ASCII 0x28e ~spcl903c~ #8
+
+COPY ~misc_ex/spclwar/spcl904.spl~ ~override~
+	SAY NAME1 ~Resist Magic~
+
+	SAY UNIDENTIFIED_DESC ~Resist Magic
+
+This ability allows the warrior to temporarily tap a great inner strength and fight off the effects of malevolent magic. The warrior's Magic Damage Resistance is increased by +30% for 1 turn.~
+	
+COPY ~misc_ex/spclwar/spcl905.spl~ ~override/spcl906.spl~
+	SAY NAME1 ~Critical Strike~
+
+	SAY UNIDENTIFIED_DESC ~Critical Strike
+	
+Duration: 1 round.
+	
+A warrior's intimate knowledge of vital spots on opponents allows <PRO_HIMHER> to concentrate their next attacks to strike a vital area. With this ability, their attack rolls will be natural 20s, a critical hit.~
+
+COPY ~misc_ex/spclwar/spcl906.spl~ ~override/spcl905.spl~
+	SAY NAME1 ~Second Wind~
+
+	SAY UNIDENTIFIED_DESC ~Second Wind
+The warrior gets a boost of energy, regenerating HP per sec for 3 rounds.
+
+lv1+: 1hp
+lv8+: 2hp
+lv11+: 3hp
+lv14+: 4hp
+lv17+: 5hp
+
+Requires: Critical Strike.~
+
+COPY ~misc_ex/spclwar/spcl907.spl~ ~override~
+	SAY NAME1 ~Hardiness~
+
+	SAY UNIDENTIFIED_DESC ~Calling upon hidden reserves of strength during times of danger, a warrior can use the Hardiness ability to gain 40% resistance to all forms of physical damage.
+
+Lv1+:5 rounds.
+Lv6+:9r.
+Lv8+:10r.
+Lv10+:13r.
+Lv12+:15r.
+
+
+This ability does not stack with Defensive Stance.~
+
+COPY ~misc_ex/spclwar/spcl908.spl~ ~override~
+	SAY NAME1 ~War Cry~
+
+	SAY UNIDENTIFIED_DESC ~War Cry
+
+Duration: 5 rounds	
+Saving Throw: vs. Breath (-2) negates
+	
+The warrior emits a powerful and staggering yell that will slow all opponents in a 8-ft. radius for 70% of their normal movement.
+
+In addition all enemies in range will receive a -2 penalty to their vs. Breath with no save.~
+
+ADD_PROJECTILE ~misc_ex/spclwar/Y5WARCRY.pro~
+COPY_EXISTING ~spcl908.spl~ ~override~
+WRITE_SHORT 0x98 ~%Y5WARCRY%~
+WRITE_LONG 0x9e ~%y5hla1%~
+WRITE_LONG 0x162 ~%y5hla1%~
+	
+COPY_EXISTING ~spcl909.spl~ ~override~
+	
+	SAY UNIDENTIFIED_DESC ~Smite
+With the Smite ability, the warrior gains the ability to strike a mighty blow, knocking an opponent back for a considerable distance and stunning the opponent for 1 round. All attacks made in the first round are critical hits. The ability lasts for 2 rounds.
+
+Large creatures such as a dragons or giants will not be knocked back or stunned.
+
+Requires: Critical Strike, Second Wind~
+
+/////////////////////////////////////////
+///////////////////////////////BEGIN MONK SPELLS
+/////////////////////////////////////////
+
+// makes monk weapons no longer be able to be dual wielded with other weapons
+
+COPY ~misc_ex/tables/monkfist.2da~ ~override~
+
+COPY_EXISTING ~mfist1.itm~ ~override~ // level 1
+	READ_LONG 0x18 type
+	WRITE_LONG 0x18 (THIS BOR BIT7)
+	WRITE_SHORT 0x86 0
+	WRITE_BYTE 0x88 8
+	WRITE_BYTE 0x8a 1
+COPY_EXISTING ~mfist2.itm~ ~override~ // level 5
+	READ_LONG 0x18 type
+	WRITE_LONG 0x18 (THIS BOR (BIT6 + BIT7))
+	WRITE_LONG 0x60 1
+	WRITE_SHORT 0x86 0
+	WRITE_BYTE 0x88 8
+	WRITE_BYTE 0x8a 1
+COPY_EXISTING ~mfist3.itm~ ~override~ // level 9
+	READ_LONG 0x18 type
+	WRITE_LONG 0x18 (THIS BOR (BIT6 + BIT7))
+	WRITE_LONG 0x60 2
+	WRITE_SHORT 0x86 1
+	WRITE_BYTE 0x88 10
+	WRITE_BYTE 0x8a 1
+COPY_EXISTING ~mfist4.itm~ ~override~ // level 12
+	READ_LONG 0x18 type
+	WRITE_LONG 0x18 (THIS BOR (BIT6 + BIT7))
+	WRITE_LONG 0x60 3
+	WRITE_SHORT 0x86 1
+	WRITE_BYTE 0x88 12
+	WRITE_BYTE 0x8a 1
+COPY_EXISTING ~mfist5.itm~ ~override~ // level 16
+	READ_LONG 0x18 type
+	WRITE_LONG 0x18 (THIS BOR (BIT6 + BIT7))
+	WRITE_LONG 0x60 4
+	WRITE_SHORT 0x86 2
+	WRITE_BYTE 0x88 14
+	WRITE_BYTE 0x8a 1
+COPY_EXISTING ~mfist6.itm~ ~override~ // level 20
+	READ_LONG 0x18 type
+	WRITE_LONG 0x18 (THIS BOR (BIT6 + BIT7))
+	WRITE_LONG 0x60 4
+	WRITE_SHORT 0x86 3
+	WRITE_BYTE 0x88 14
+	WRITE_BYTE 0x8a 1
+COPY_EXISTING ~mfist7.itm~ ~override~ // level 22
+	READ_LONG 0x18 type
+	WRITE_LONG 0x18 (THIS BOR (BIT6 + BIT7))
+	WRITE_LONG 0x60 4
+	WRITE_SHORT 0x86 3
+	WRITE_BYTE 0x88 14
+	WRITE_BYTE 0x8a 1
+COPY_EXISTING ~mfist8.itm~ ~override~ // level 24
+	READ_LONG 0x18 type
+	WRITE_LONG 0x18 (THIS BOR (BIT6 + BIT7))
+	WRITE_LONG 0x60 5
+	WRITE_SHORT 0x86 4
+	WRITE_BYTE 0x88 14
+	WRITE_BYTE 0x8a 1
+	
+COPY_EXISTING_REGEXP GLOB ~^.+\.cre$~ ~override~
+READ_LONG  0x273 class
+PATCH_IF (class = 20) BEGIN
+	LPF ADD_CRE_EFFECT INT_VAR opcode = 317 target = 1 parameter1 = 1 timing = 9 resist_dispel = 2 END
+	LPF ADD_CRE_EFFECT INT_VAR opcode = 126 target = 1 parameter1 = 50 parameter2 = 2 timing = 9 resist_dispel = 2 END
+	LPF ADD_CRE_EFFECT INT_VAR opcode = 190 target = 1 parameter1 = (0 - 2) timing = 9 resist_dispel = 2 END
+END
+BUT_ONLY
+
+COPY ~misc_ex/spclmonk/spcl812.spl~ ~override~
+	
+/////////////////////////////////////////
+///////////////////////////////BEGIN CLASS SPELLS
+/////////////////////////////////////////
+
+
+COPY ~misc_ex/spclass/spja01.spl~ ~override~ // jaheria resurrection innate
+
+COPY ~misc_ex/spclass/spdwd02.spl~ ~override~
+	SAY NAME1 ~Defensive Stance~
+	
+	SAY UNIDENTIFIED_DESC ~Defensive Stance
+	
+For 1 turn, the character gains +50% resistance to all forms of physical damage, and +2 bonus to Saving Throws.
+Defensive Stance may not be used in conjunction with Hardiness.~
+
+COPY_EXISTING ~archmov.eff~ ~override~ // save vs spell changed to vs breath
+WRITE_LONG 0x10 36
+WRITE_LONG 0x1c (0 - 1)
+WRITE_LONG 0x28 12
+BUT_ONLY
+
+COPY ~misc_ex/spclass/Y5ARC318.spl~ ~override~
+WRITE_LONG 0xa2 ~%y5arc1%~
+
+COPY_EXISTING ~archslow.eff~ ~override~ // actual slow application
+WRITE_LONG 0x10 326
+WRITE_LONG 0x14 2
+WRITE_LONG 0x20 111
+WRITE_LONG 0x1c ~%y5arc1%~
+WRITE_LONG 0x28 0
+WRITE_ASCII 0x30 ~Y5ARC318~
+BUT_ONLY
+
+COPY_EXISTING ~spcl121.spl~ ~override~
+SAY NAME1 ~Called Shot~
+
+SAY UNIDENTIFIED_DESC ~Called Shot
+
+All successful ranged attacks within the next 10 seconds have the following cumulative effects besides slowing effects, according to the level of the caster:
+
+4th Level: -1 penalty to target's THAC0.
+8th Level: -1 penalty to target's vs. Breath.
+12th Level: 70% penalty to target's movement speed for 10 seconds, vs. Breath negates.
+16th Level: +2 bonus to damage roll.~
+
+COPY ~misc_ex/spclass/spcl522.spl~ ~override~
+	SAY NAME1 ~Defensive Spin~
+	
+	SAY UNIDENTIFIED_DESC ~During the next 4 rounds, the character gains a +1 bonus to Armor Class per level, up to a maximum of +10.~
+
+ACTION_IF FILE_EXISTS_IN_GAME ~spwi923c.bam~ BEGIN
+
+COPY ~misc_ex/misc/spcl923.spl~ ~override~
+COPY ~misc_ex/misc/spcl935.spl~ ~override~
+COPY ~misc_ex/misc/sppr726.spl~ ~override~
+COPY ~misc_ex/misc/sppr727.spl~ ~override~
+COPY ~misc_ex/misc/spwi923.spl~ ~override~
+COPY ~misc_ex/misc/spwi924.spl~ ~override~
+
+COPY_EXISTING ~spcl923.spl~ ~override~
+	SAY NAME1 ~Summon Deva~
+	
+	SAY UNIDENTIFIED_DESC ~Summon Deva
+(Conjuration/Summoning)
+
+Level: Quest
+Range: 120 ft.
+Duration: 1 turn, Lv25+:2 turns.
+Casting Time: 5
+Area of Effect: Special
+Saving Throw: None
+
+This spell opens a celestial gate and calls forth an angelic deva to fight at the caster's side until the spell expires or the deva's earthly avatar is slain.~
+
+COPY_EXISTING ~spcl935.spl~ ~override~
+	SAY NAME1 ~Summon Fallen Deva~
+	
+	SAY UNIDENTIFIED_DESC ~Summon Fallen Deva
+(Conjuration/Summoning)
+ 
+Level: Quest
+Range: 120 ft.
+Duration: 1 turn, Lv25+:2 turns.
+Casting Time: 5
+Area of Effect: Special
+Saving Throw: None
+
+This spell opens an abyssal gate and calls forth a demonic deva to fight at the caster's side until the spell expires or the deva's earthly avatar is slain.~
+
+COPY_EXISTING ~sppr726.spl~ ~override~
+	SAY NAME1 ~Summon Deva~
+	
+	SAY UNIDENTIFIED_DESC ~Summon Deva
+(Conjuration/Summoning)
+
+Level: Quest
+Range: 120 ft.
+Duration: 1 turn, Lv25+:2 turns.
+Casting Time: 5
+Area of Effect: Special
+Saving Throw: None
+
+This spell opens a celestial gate and calls forth an angelic deva to fight at the caster's side until the spell expires or the deva's earthly avatar is slain.~
+
+COPY_EXISTING ~sppr727.spl~ ~override~
+	SAY NAME1 ~Summon Fallen Deva~
+	
+	SAY UNIDENTIFIED_DESC ~Summon Fallen Deva
+(Conjuration/Summoning)
+ 
+Level: Quest
+Range: 120 ft.
+Duration: 1 turn, Lv25+:2 turns.
+Casting Time: 5
+Area of Effect: Special
+Saving Throw: None
+
+This spell opens an abyssal gate and calls forth a demonic deva to fight at the caster's side until the spell expires or the deva's earthly avatar is slain.~
+
+COPY_EXISTING ~spwi923.spl~ ~override~
+	SAY NAME1 ~Summon Planetar~
+	
+	SAY UNIDENTIFIED_DESC ~Summon Planetar
+(Any School)
+
+Level: 10
+Range: 120 ft.
+Duration: 1 turn, Lv25+:2 turns.
+Casting Time: 5
+Area of Effect: Special
+Saving Throw: None
+
+This spell opens a celestial gate and calls forth a planetar to fight at the caster's side until the spell expires or the planetar's avatar is slain.~
+
+COPY_EXISTING ~spwi924.spl~ ~override~
+	SAY NAME1 ~Summon Dark Planetar~
+	
+	SAY UNIDENTIFIED_DESC ~Summon Dark Planetar 
+(Any School)
+
+Level: 10
+Range: 120 ft.
+Duration: 1 turn, Lv25+:2 turns.
+Casting Time: 5
+Area of Effect: Special
+Saving Throw: None
+
+This spell opens an abyssal gate and calls forth a fallen planetar to fight at the caster's side until the spell expires or the planetar's avatar is slain.~
+
+COPY_EXISTING ~lupa0.2da~ ~override~ 
+	REPLACE_TEXTUALLY ~\(GA_SPCL923[ %TAB%]+\)\(*[ %TAB%]+\)\(*[ %TAB%]+\)[-0-9]+~     ~*%TAB%*%TAB%*%TAB%*~
+	PRETTY_PRINT_2DA
+BUT_ONLY	
+
+COPY_EXISTING ~lupa4.2da~ ~override~ 
+	REPLACE_TEXTUALLY ~\(GA_SPCL935[ %TAB%]+\)\(*[ %TAB%]+\)\(*[ %TAB%]+\)[-0-9]+~     ~*%TAB%*%TAB%*%TAB%*~
+	PRETTY_PRINT_2DA
+BUT_ONLY
+
+	
+ADD_SPELL "misc_ex/misc/spcl910.spl" 4 9 SUMMON_DEVA_BOTH
+LAF RES_NUM_OF_SPELL_NAME STR_VAR spell_name = ~SUMMON_DEVA_BOTH~ RET spell_res END
+
+COPY_EXISTING ~%spell_res%.spl~ ~override~
+	SAY NAME1 ~Summon Deva~
+	
+	SAY UNIDENTIFIED_DESC ~Summon Deva
+(Conjuration/Summoning)
+
+Level: Quest
+Range: 120 ft.
+Duration: 1 turn, Lv25+:2 turns.
+Casting Time: 5
+Area of Effect: Special
+Saving Throw: None
+Alignment: Effects summoned deva.
+
+
+This spell opens a celestial gate (or) an abyssal gate and calls forth an angelic deva (or) a fallen planetar to fight at the caster's side until the spell expires or the deva's earthly avatar is slain.~
+
+
+
+APPEND ~clabpa01.2da~ ~Y5_ABIL1		****		****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        GA_%spell_res%        ****        ****        GA_%spell_res%        ****        ****        GA_%spell_res%	****        ****        ****	****        ****		****	****        ****        ****        ****        ****        ****        ****        ****        ****~
+COPY_EXISTING ~clabpa01.2da~ ~override~
+PRETTY_PRINT_2DA
+
+APPEND ~clabpa02.2da~ ~Y5_ABIL1		****		****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        GA_%spell_res%        ****        ****        GA_%spell_res%        ****        ****        GA_%spell_res%	****        ****        ****	****        ****		****	****        ****        ****        ****        ****        ****        ****        ****        ****~
+COPY_EXISTING ~clabpa02.2da~ ~override~
+PRETTY_PRINT_2DA
+
+APPEND ~clabpa03.2da~ ~Y5_ABIL1		****		****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        GA_%spell_res%        ****        ****        GA_%spell_res%        ****        ****        GA_%spell_res%	****        ****        ****	****        ****		****	****        ****        ****        ****        ****        ****        ****        ****        ****~
+COPY_EXISTING ~clabpa03.2da~ ~override~
+PRETTY_PRINT_2DA
+
+APPEND ~clabpa04.2da~ ~Y5_ABIL1		****		****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        GA_%spell_res%        ****        ****        GA_%spell_res%        ****        ****        GA_%spell_res%	****        ****        ****	****        ****		****	****        ****        ****        ****        ****        ****        ****        ****        ****~
+COPY_EXISTING ~clabpa04.2da~ ~override~
+PRETTY_PRINT_2DA
+
+APPEND ~clabpa05.2da~ ~Y5_ABIL1		****		****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        GA_%spell_res%        ****        ****        GA_%spell_res%        ****        ****        GA_%spell_res%	****        ****        ****	****        ****		****	****        ****        ****        ****        ****        ****        ****        ****        ****~
+COPY_EXISTING ~clabpa05.2da~ ~override~
+PRETTY_PRINT_2DA
+
+APPEND ~clabpa06.2da~ ~Y5_ABIL1		****		****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        ****        GA_%spell_res%        ****        ****        GA_%spell_res%        ****        ****        GA_%spell_res%	****        ****        ****	****        ****		****	****        ****        ****        ****        ****        ****        ****        ****        ****~
+COPY_EXISTING ~clabpa06.2da~ ~override~
+PRETTY_PRINT_2DA
+
+APPEND ~hidespl.2da~ ~%spell_res% 1           0          0~
+
+COPY_EXISTING ~devagood.cre~ ~override~
+	WRITE_ASCII 0x248 ~dw#sutwi~ 
+	WRITE_ASCII 0x250 ~devagood~
+	
+COPY_EXISTING ~devaevil.cre~ ~override~
+	WRITE_ASCII 0x248 ~dw#sutwi~ 
+	WRITE_ASCII 0x250 ~devaevil~
+
+STRING_SET 9558 ~PALADIN: A Paladin is a warrior bold and pure, the exemplar of everything good and true. Like the Fighter, the Paladin is a person of action and combat. However, the Paladin lives for the ideals of righteousness, justice, honesty, piety, and chivalry and strives to be a living example of these virtues so that others may learn from <PRO_HIMHER> as well as gain by <PRO_HISHER> actions.
+
+CLASS FEATURES:
+
+– May wear helmets.
+– May wear any armor and use any weapon.
+– May not exceed Specialization (two slots) in any weapon class.
+– May achieve Specialization (two slots) in any fighting style and allocate three slots in Two-Weapon Style.
+– May use Lay On Hands ability once per day to heal a target for 2 Hit Points per level of the Paladin.
+– May cast Detect Evil once per day per level (starts at 1st level with 4 uses).
+– May cast Protection From Evil once per day per level (starts at 1st level with one use).
+– May Turn Undead as a Cleric two levels lower, starting at level 3.
+– May cast priest spells starting at level 9.
+– May cast Summon Deva once per day per 3 levels, starting at level 19 (for a total of 3 gains, level 19, 22, and 25).
+– Receives a +2 bonus to all Saving Throws.
+– Alignment restricted to lawful good.
+– Hit Die: d10~
+
+COPY_EXISTING ~campaign.2da~ ~override~
+REPLACE_TEXTUALLY ~\(SOA[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+\)[-0-9a-zA-Z\_\*]+~ ~\1CLASTEXT~
+
+REPLACE_TEXTUALLY ~\(TOB[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+\)[-0-9a-zA-Z\_\*]+~ ~\1CLASTEXT~
+
+REPLACE_TEXTUALLY ~\(BG1[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+\)[-0-9a-zA-Z\_\*]+~ ~\1CLASTEXT~
+
+REPLACE_TEXTUALLY ~\(SOD[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+[ %TAB%]+[-0-9a-zA-Z\_\*]+[ %TAB%]+\)[-0-9a-zA-Z\_\*]+~ ~\1CLASTEXT~
+
+PRETTY_PRINT_2DA
+
+//~\(BG1(:?[ %TAB%]+[\w\*]+[ %TAB%]+){29}\)[\w\*]+~ ~\1CLASTEXT~
+
+BUT_ONLY
+
+OUTER_SET text = 999999
+
+COPY_EXISTING ~clastext.2da~ ~override~
+REPLACE_TEXTUALLY ~\(ARCHER[ %TAB%]+[-0-9]+[ %TAB%]+[-0-9]+[ %TAB%]+[-0-9]+[ %TAB%]+\)[-0-9]+~ ~\1%text%~
+REPLACE 999999 ~ARCHER: The Archer is the epitome of skill with the bow—the ultimate marks<PRO_MANWOMAN>, able to make almost any shot, no matter how difficult. To become so skilled with the bow, the Archer has had to sacrifice some of <PRO_HISHER> proficiency with melee weapons and armor.
+
+Advantages:
+– +1 to hit and damage rolls with any missile weapon every 3 levels.
+– May achieve Grand Mastery (5 slots) in longbows, shortbows, and crossbows.
+– May use the Called Shot ability once per day. Gains one use at level 4 and an additional use every 4 levels thereafter.
+
+CALLED SHOT: All successful ranged attacks within the next 10 seconds have the following cumulative effects besides slowing effects, according to the level of the caster:
+
+4th Level: -1 penalty to target's THAC0.
+8th Level: -1 penalty to target's vs. Breath.
+12th Level: 70% penalty to target's movement speed for 10 seconds, vs. Breath negates.
+16th Level: +2 bonus to damage roll.
+
+Disadvantages:
+– May only wear leather, studded leather, and hide armor.
+– May only become Proficient (one slot) with melee weapons.
+– May not use the Charm Animal ability.~
+
+//use the below to set a variable to the searched regexp
+
+REPLACE_EVALUATE  ~\(ARCHER[ %TAB%]+[-0-9]+[ %TAB%]+[-0-9]+[ %TAB%]+[-0-9]+[ %TAB%]+\)\([-0-9]+\)~
+BEGIN SET "arcdesc" = MATCH2 END ~%MATCH1%%MATCH2%~
+
+REPLACE_TEXTUALLY ~\(MONK[ %TAB%]+[-0-9]+[ %TAB%]+[-0-9]+[ %TAB%]+[-0-9]+[ %TAB%]+\)[-0-9]+~ ~\1%text%~
+REPLACE 999999 ~MONK: Monks are warriors who pursue perfection through contemplation as well as action. They are versatile fighters, especially skilled in combat without weapons or armor. Though Monks cannot cast spells, they have a unique magic of their own: They channel a subtle energy, called ki, which allows them to perform amazing feats. The Monk's best known feat is their ability to stun an opponent with an unarmed blow.
+
+CLASS FEATURES:
+
+– May not wear any armor.
+– May only use weapons available to the Thief class (except two-handed).
+– May only become Proficient (one slot) in any weapon class.
+– May only become Proficient (one slot) in Single-Weapon Style and may not put slots into any other style.
+– Movement rate further improves by 1 every 5 levels.
+
+– May make 2 unarmed attacks per round. An additional attack per round is gained every 3 levels. Damage dealt by unarmed attacks increases with level as follows:
+  Levels 1-9: 1d8
+  Levels 10-11: 1d10
+  Levels 12-15: 1d12
+  Levels 17-20+: 1d14
+  
+– At level 5, unarmed attacks are treated as a +1 magical weapon. This enchantment improves cumulatively at levels 9, 12, 16 and 24.
+– At level 9, unarmed attacks gain a +1 bonus to thac0, improving cumulatively at levels 16, 20, and 24.
+ 
+– Receives a +2 bonus to Saving Throws vs. Spell.
+– Deflect Missiles: +1 bonus to AC vs. missile attacks every 3 levels.
+– Starts with an Armor Class of 9 at 1st level and gains an additional +1 bonus every 2 levels.
+– May use the Stunning Blow ability once per day. Gains one use at level 1 and an additional use every 4 levels thereafter.
+
+STUNNING BLOW: All successful attacks within the next round force the victim to save vs. Spell or be stunned. This special ability automatically modifies normal attacks; no targeting needs to be done.
+
+– 5th level: Becomes immune to all diseases and cannot be slowed or hasted.
+– 7th level: May use the Lay On Hands ability on <PRO_HIMHER>self to heal 2 Hit Points per level.
+– 8th level: Gains a -1 bonus to Speed Factor.
+– 9th level: Gains a +1 bonus to all Saving Throws and becomes immune to charm.
+– 11th level: Becomes immune to poison.
+– 12th level: Gains another -1 bonus to Speed Factor.
+– 13th level: May use the Quivering Palm ability once per day.
+
+QUIVERING PALM: The next successful attack forces the opponent to save vs. Spell or die. This special ability automatically modifies normal attacks; no targeting needs to be done.
+
+– 14th level: Gains 3% Magic Resistance per level (starting with 42% at 14th level).
+– 20th level: Becomes immune to non-magical weapons.
+– Alignment restricted to lawful.
+– Hit Die: d8~
+
+REPLACE_EVALUATE  ~\(ARCHER[ %TAB%]+[-0-9]+[ %TAB%]+[-0-9]+[ %TAB%]+[-0-9]+[ %TAB%]+\)\([-0-9]+\)~
+BEGIN SET "monkdesc" = MATCH2 END ~%MATCH1%%MATCH2%~
+
+PRETTY_PRINT_2DA
+
+COPY_EXISTING ~enginest.2da~ ~override~
+
+REPLACE_TEXTUALLY ~\(STRREF_GUI_HELP_KIT_FERALAN[ %TAB%]+\)[-0-9]+~ ~\1%arcdesc%~
+REPLACE_TEXTUALLY ~\(STRREF_GUI_HELP_KIT_MONK[ %TAB%]+\)[-0-9]+~ ~\1%monkdesc%~
+
+PRETTY_PRINT_2DA
+
+COPY_EXISTING ~kitlist.2da~ ~override~
+
+REPLACE_TEXTUALLY ~\(CAVALIER[ %TAB%]+[-0-9]+[ %TAB]+[-0-9]+[ %TAB]+\)[-0-9]+[ %TAB]+~ ~\1%text%%TAB%~
+REPLACE 999999 ~CAVALIER: This class represents the most common picture of the knight: the chivalrous warrior who epitomizes honor, courage, and loyalty. The Cavalier is specialized in battling "classical" evil monsters such as demons and dragons.
+
+Advantages:
+– +3 bonus to hit and damage rolls against all fiendish and draconic creatures.
+– May cast Remove Fear 1 time per day per level.
+– Immune to charm, fear, poison, and morale failure.
+– 20% resistance to fire and acid.
+– May cast Summon Deva once per day per 3 levels, starting at level 19 (for a total of 3 gains, level 19, 22, and 25).
+
+Disadvantages:
+– May not use missile weapons.~
+
+REPLACE_TEXTUALLY ~\(INQUISITOR[ %TAB%]+[-0-9]+[ %TAB]+[-0-9]+[ %TAB]+\)[-0-9]+[ %TAB]+~ ~\1%text%%TAB%~
+REPLACE 999999 ~INQUISITOR: The Inquisitor has dedicated <PRO_HISHER> life to finding and eliminating practitioners of evil magic and defeating the forces of darkness, and <PRO_HISHER> god has provided <PRO_HIMHER> with special abilities toward that end.
+
+Advantages:
+– May cast Dispel Magic once per day. Gains one use at level 1 and an additional use every 4 levels thereafter. The spell is cast at Speed Factor 1 and acts at twice the Inquisitor's character level. 
+– May cast True Sight once per day. Gains one use at level 1 and an additional use every 4 levels thereafter.
+– Immune to hold and charm.
+– May cast Summon Deva once per day per 3 levels, starting at level 19 (for a total of 3 gains, level 19, 22, and 25).
+
+Disadvantages:
+– May not turn undead.
+– May not use the Lay On Hands ability. 
+– May not cast priest spells.~
+
+REPLACE_TEXTUALLY ~\(UNDEAD_HUNTER[ %TAB%]+[-0-9]+[ %TAB]+[-0-9]+[ %TAB]+\)[-0-9]+[ %TAB]+~ ~\1%text%%TAB%~
+REPLACE 999999 ~UNDEAD HUNTER: This holy avenger has honed <PRO_HISHER> abilities toward the destruction of the undead and other unnatural creatures and is immune to many of their most devastating abilities.
+
+Advantages:
+– +3 bonus to hit and damage rolls against undead creatures.
+– Immune to hold and level drain.
+– May cast Summon Deva once per day per 3 levels, starting at level 19 (for a total of 3 gains, level 19, 22, and 25).
+
+Disadvantages:
+– May not use Lay On Hands ability.~
+
+REPLACE_TEXTUALLY ~\(Blackguard[ %TAB%]+[-0-9]+[ %TAB]+[-0-9]+[ %TAB]+\)[-0-9]+[ %TAB]+~ ~\1%text%%TAB%~
+REPLACE 999999 ~BLACKGUARD: The Blackguard epitomizes evil and is nothing short of a mortal fiend. The quintessential black knight, this villain carries a reputation of the foulest sort that is very well deserved. Consorting with demons and devils and serving dark deities, the Blackguard is hated and feared by all. Some people call these villains "anti-paladins" due to their completely evil nature.
+
+Advantages:
+– Immune to level drain and fear.
+– May turn undead as a Paladin of the same level.
+– May use the Absorb Health ability once per day.
+– May cast Summon Deva once per day per 3 levels, starting at level 19 (for a total of 3 gains, level 19, 22, and 25).
+
+
+ABSORB HEALTH:
+Deals 2 points of damage per level to an enemy, healing the Blackguard the same number of Hit Points.
+
+– May use the Poison Weapon ability once per day. Gains one use at level 1, one use at level 5, and an additional use every 5 levels thereafter.
+
+Poison Weapon
+Each successful hit within the next 5 rounds will inject poison into the target. Each target can only be affected once per round. The amount of poison damage depends on the character's level:
+
+1st - Target suffers 1 poison damage per second for 6 seconds (Save vs. Death at +1 negates)
+5th - Target suffers 1 poison damage per second for 12 seconds (Save vs. Death negates), and also immediately suffers 2 poison damage (no save)
+9th - Target suffers 1 poison damage per second for 18 seconds (Save vs. Death at -1 negates), and also immediately suffers 4 poison damage (no save)
+13th - Target suffers 1 poison damage per second for 24 seconds (Save vs. Death at -2 negates), and also immediately suffers 6 poison damage (no save)
+
+– 3rd level: May use the Aura of Despair ability once per day.
+
+AURA OF DESPAIR: When this ability is activated, all enemies within 15 feet of the Blackguard suffer ill effects based on the Blackguard's level:
+  3rd level - All enemies suffer a -1 penalty to hit and damage rolls and a -2 penalty to Armor Class for 1 turn.
+  6th level - All enemies suffer a -2 penalty to hit and damage rolls and a -2 penalty to Armor Class for 1 turn.
+  15th level - All enemies suffer a -4 penalty to hit and damage rolls and a -4 penalty to Armor Class for 1 turn; enemies with 8 or fewer Hit Dice are panicked as well.
+  20th Level - All enemies suffer a -4 penalty to hit and damage rolls and a -4 penalty to Armor Class for 1 turn; enemies with 18 or fewer Hit Dice are panicked as well.
+
+Disadvantages:
+– Alignment restricted to evil.
+– May not cast Detect Evil.
+– May not cast Protection From Evil as an innate ability.
+– May not use the Lay on Hands ability.~
+
+REPLACE_TEXTUALLY ~\(DWARVEN_DEFENDER[ %TAB%]+[-0-9]+[ %TAB%]+[-0-9]+[ %TAB%]+\)[-0-9]+~ ~\1%text%~
+REPLACE 999999 ~DWARVEN DEFENDER: The Dwarven Defender is a formidable warrior that is reputed to be worth two soldiers of any other race. Trained extensively in the art of dwarven warfare, a handful of these stout fighters can render a defensive line all but unbreakable. 
+
+Advantages:
+– May use Defensive Stance once per day. Gains one use at level 1, one use at level 4, and an additional use every 4 levels thereafter.
+
+DEFENSIVE STANCE: For 1 turn, the Dwarven Defender gains +50% resistance to all forms of physical damage, a +2 bonus to Saving Throws.
+
+– Gains 5% resistance to crushing, slashing, piercing, and missile damage every 5 levels to a maximum of 20% at level 20.
+– Hit Die: d12
+
+Disadvantages:
+– Race restricted to dwarf.
+– May not exceed High Mastery (four slots) in axes and war hammers.
+– May not exceed Specialization (two slots) in any other weapon.~
+
+REPLACE_TEXTUALLY ~\(BLADE[ %TAB%]+[-0-9]+[ %TAB%]+[-0-9]+[ %TAB%]+\)[-0-9]+~ ~\1%text%~
+REPLACE 999999 ~BLADE: The Blade is an expert fighter and adventurer whose bardic acting abilities make <PRO_HIMHER> appear more intimidating and fearsome. This Bard's fighting style is flashy and entertaining, but is also lethally dangerous.
+
+Advantages:
+– May place 3 slots in Two-Weapon Style.
+– May use the Offensive Spin and Defensive Spin abilities once per day. Gains one use each at level 1 and an additional use each every 4 levels thereafter.
+
+OFFENSIVE SPIN: During the next 4 rounds, the Blade's movement rate doubles and <PRO_HESHE> gains a +2 bonus to hit and damage rolls as well as an extra attack per round. All attacks deal maximum damage for the duration. Offensive Spin may not be used in conjunction with the Haste or Improved Haste spells.
+
+DEFENSIVE SPIN: During the next 4 rounds, the Blade gains a +1 bonus to Armor Class per level, up to a maximum of +10.
+
+Disadvantages:
+– Only has one half the normal Lore value.
+– Only has one half the normal Pick Pockets skill.~
+
+REPLACE_TEXTUALLY ~\(FERALIN[ %TAB%]+[-0-9]+[ %TAB%]+[-0-9]+[ %TAB%]+\)[-0-9]+~ ~\1%arcdesc%~
+
+PRETTY_PRINT_2DA
+
+END
+
+
+COPY_EXISTING ~devagood.cre~ ~override~
+	WRITE_ASCII 0x248 ~dw#sutwi~ 
+	WRITE_ASCII 0x250 ~devagood~
+	
+COPY_EXISTING ~devaevil.cre~ ~override~
+	WRITE_ASCII 0x248 ~dw#sutwi~ 
+	WRITE_ASCII 0x250 ~devaevil~
+
+/////////////////////////////////////////
+///////////////////////////////BEGIN LoB SAVES
+/////////////////////////////////////////
+
+BEGIN ~Corrected Saves for LoB~
+DESIGNATED 505
+REQUIRE_PREDICATE !(MOD_IS_INSTALLED ~misc_ex/misc_ex.tp2~ ~19~ AND MOD_IS_INSTALLED ~misc_ex/misc_ex.tp2~ ~20~) ~Only one version of LoB Options can be installed.~
+SUBCOMPONENT ~LoB Options~
+COPY ~misc_ex/lob/y5lob1.spl~ ~override/y5lob.spl~
+LPF CLONE_EFFECT INT_VAR silent = 1 match_opcode = 325 match_target = 1 parameter1 = 0 timing = 0 STR_VAR resource = "Y5LOB" END
+
+<<<<<<<< .../Y5SAVES.baf
+IF
+	NightmareModeOn()
+	Global("Y5DIFF","LOCALS",0)
+	!InParty(Myself)
+	!Allegiance(Myself,FAMILIAR)
+	!Allegiance(Myself,CONTROLLED)
+	OR(2)
+		!Alignment(Myself,NEUTRAL)
+		!Gender(Myself,SUMMONED)
+THEN
+	RESPONSE #100
+		ForceSpellRES("Y5LOB",Myself)
+		SetGlobal("Y5DIFF","LOCALS",1)
+END
+>>>>>>>>
+
+COMPILE ~.../Y5SAVES.baf~
+
+COPY_EXISTING_REGEXP GLOB ~^.+\.cre$~ ~override~
+READ_LONG  0x1cc biography
+PATCH_IF ((biography > 2147483646) OR (biography < 1)) BEGIN
+	READ_ASCII 0x248 script
+	TO_UPPER script
+	PATCH_IF ("%script%" STRING_EQUAL "NONE" = 1) OR ("%script%" STRING_EQUAL_CASE "" = 1) BEGIN
+		WRITE_ASCII 0x248 ~Y5SAVES~ #8
+	END ELSE BEGIN
+		DEFINE_ASSOCIATIVE_ARRAY targetScripts BEGIN
+			~%script%~ => 0
+		END
+	END
+END
+BUT_ONLY
+
+ACTION_PHP_EACH targetScripts AS source => numVal BEGIN
+	EXTEND_TOP ~%source%.bcs~ ~override/Y5SAVES.bcs~
+END
+
+COPY_EXISTING_REGEXP GLOB ~^.+\.cre$~ ~override~
+READ_LONG  0x1cc biography
+PATCH_IF !((biography > 2147483646) OR (biography < 1)) BEGIN
+	LPF ADD_CRE_EFFECT INT_VAR opcode = 318 target = 1 timing = 9 resist_dispel = 2 STR_VAR resource = "Y5LOB" END
+END
+BUT_ONLY
+
+//////////////////////////////////////////////////////////////////////////////////
+
+BEGIN ~Scaling AC and Corrected Saves for LoB~
+DESIGNATED 506
+REQUIRE_PREDICATE !(MOD_IS_INSTALLED ~misc_ex/misc_ex.tp2~ ~18~ AND MOD_IS_INSTALLED ~misc_ex/misc_ex.tp2~ ~20~) ~Only one version of LoB Options can be installed.~
+SUBCOMPONENT ~LoB Options~
+COPY ~misc_ex/lob/y5lob2.spl~ ~override/y5lob.spl~
+LPF CLONE_EFFECT INT_VAR silent = 1 match_opcode = 325 match_target = 1 parameter1 = 0 timing = 0 STR_VAR resource = "Y5LOB" END
+
+<<<<<<<< .../Y5SAVES.baf
+IF
+	NightmareModeOn()
+	Global("Y5DIFF","LOCALS",0)
+	!InParty(Myself)
+	!Allegiance(Myself,FAMILIAR)
+	!Allegiance(Myself,CONTROLLED)
+	OR(2)
+		!Alignment(Myself,NEUTRAL)
+		!Gender(Myself,SUMMONED)
+THEN
+	RESPONSE #100
+		ForceSpellRES("Y5LOB",Myself)
+		SetGlobal("Y5DIFF","LOCALS",1)
+END
+>>>>>>>>
+
+COMPILE ~.../Y5SAVES.baf~
+
+COPY_EXISTING_REGEXP GLOB ~^.+\.cre$~ ~override~
+READ_LONG  0x1cc biography
+PATCH_IF ((biography > 2147483646) OR (biography < 1)) BEGIN
+	READ_ASCII 0x248 script
+	TO_UPPER script
+	PATCH_IF ("%script%" STRING_EQUAL "NONE" = 1) OR ("%script%" STRING_EQUAL_CASE "" = 1) BEGIN
+		WRITE_ASCII 0x248 ~Y5SAVES~ #8
+	END ELSE BEGIN
+		DEFINE_ASSOCIATIVE_ARRAY targetScripts BEGIN
+			~%script%~ => 0
+		END
+	END
+END
+BUT_ONLY
+
+ACTION_PHP_EACH targetScripts AS source => numVal BEGIN
+	EXTEND_TOP ~%source%.bcs~ ~override/Y5SAVES.bcs~
+END
+
+COPY_EXISTING_REGEXP GLOB ~^.+\.cre$~ ~override~
+READ_LONG  0x1cc biography
+PATCH_IF !((biography > 2147483646) OR (biography < 1)) BEGIN
+	LPF ADD_CRE_EFFECT INT_VAR opcode = 318 target = 1 timing = 9 resist_dispel = 2 STR_VAR resource = "Y5LOB" END
+END
+BUT_ONLY
+
+//////////////////////////////////////////////////////////////////////////////////
+
+BEGIN ~Increased AC and Corrected Saves for LoB~
+DESIGNATED 507
+REQUIRE_PREDICATE !(MOD_IS_INSTALLED ~misc_ex/misc_ex.tp2~ ~18~ AND MOD_IS_INSTALLED ~misc_ex/misc_ex.tp2~ ~19~) ~Only one version of LoB Options can be installed.~
+SUBCOMPONENT ~LoB Options~
+COPY ~misc_ex/lob/y5lob3.spl~ ~override/y5lob.spl~
+LPF CLONE_EFFECT INT_VAR silent = 1 match_opcode = 325 match_target = 1 parameter1 = 0 timing = 0 STR_VAR resource = "Y5LOB" END
+
+<<<<<<<< .../Y5SAVES.baf
+IF
+	NightmareModeOn()
+	Global("Y5DIFF","LOCALS",0)
+	!InParty(Myself)
+	!Allegiance(Myself,FAMILIAR)
+	!Allegiance(Myself,CONTROLLED)
+	OR(2)
+		!Alignment(Myself,NEUTRAL)
+		!Gender(Myself,SUMMONED)
+THEN
+	RESPONSE #100
+		ForceSpellRES("Y5LOB",Myself)
+		SetGlobal("Y5DIFF","LOCALS",1)
+END
+>>>>>>>>
+
+COMPILE ~.../Y5SAVES.baf~
+
+COPY_EXISTING_REGEXP GLOB ~^.+\.cre$~ ~override~
+READ_LONG  0x1cc biography
+PATCH_IF ((biography > 2147483646) OR (biography < 1)) BEGIN
+	READ_ASCII 0x248 script
+	TO_UPPER script
+	PATCH_IF ("%script%" STRING_EQUAL "NONE" = 1) OR ("%script%" STRING_EQUAL_CASE "" = 1) BEGIN
+		WRITE_ASCII 0x248 ~Y5SAVES~ #8
+	END ELSE BEGIN
+		DEFINE_ASSOCIATIVE_ARRAY targetScripts BEGIN
+			~%script%~ => 0
+		END
+	END
+END
+BUT_ONLY
+
+ACTION_PHP_EACH targetScripts AS source => numVal BEGIN
+	EXTEND_TOP ~%source%.bcs~ ~override/Y5SAVES.bcs~
+END
+
+COPY_EXISTING_REGEXP GLOB ~^.+\.cre$~ ~override~
+READ_LONG  0x1cc biography
+PATCH_IF !((biography > 2147483646) OR (biography < 1)) BEGIN
+	LPF ADD_CRE_EFFECT INT_VAR opcode = 318 target = 1 timing = 9 resist_dispel = 2 STR_VAR resource = "Y5LOB" END
+END
+BUT_ONLY
+
+/////////////////////////////////////////
+///////////////////////////////BEGIN SCS SUMMONS
+/////////////////////////////////////////
+
+BEGIN ~Responsive Summons *See Readme~
+DESIGNATED 510
+REQUIRE_COMPONENT ~STRATAGEMS/SETUP-STRATAGEMS.TP2~ 6000 ~Requires SCS Smarter general AI.~
+
+ACTION_IF FILE_EXISTS_IN_GAME ~dw#sumei.bcs~ BEGIN
+
+COPY ~misc_ex/misc/dw#sumei.bcs~ ~override~
+COPY ~misc_ex/misc/dw#sutwi.bcs~ ~override~
+
+// familiars are separate since they don't respond to LastSummonerOf (temp fix instead of having it go to whatever player summmoned them)
+
+COPY ~misc_ex/misc/Y5SUM.bcs~ ~override~
+
+COPY_EXISTING ~fampsd_.cre~ ~override~
+WRITE_ASCII 0x248 ~Y5SUM~ #8
+COPY_EXISTING ~fampsd.cre~ ~override~
+WRITE_ASCII 0x248 ~Y5SUM~ #8
+COPY_EXISTING ~fampsd25.cre~ ~override~
+WRITE_ASCII 0x248 ~Y5SUM~ #8
+
+COPY_EXISTING ~famrab_.cre~ ~override~
+WRITE_ASCII 0x248 ~Y5SUM~ #8
+COPY_EXISTING ~famrab.cre~ ~override~
+WRITE_ASCII 0x248 ~Y5SUM~ #8
+COPY_EXISTING ~famrab25.cre~ ~override~
+WRITE_ASCII 0x248 ~Y5SUM~ #8
+
+COPY_EXISTING ~famquas_.cre~ ~override~
+WRITE_ASCII 0x248 ~Y5SUM~ #8
+COPY_EXISTING ~famquas.cre~ ~override~
+WRITE_ASCII 0x248 ~Y5SUM~ #8
+COPY_EXISTING ~famqua25.cre~ ~override~
+WRITE_ASCII 0x248 ~Y5SUM~ #8
+
+COPY_EXISTING ~famimp_.cre~ ~override~
+WRITE_ASCII 0x248 ~Y5SUM~ #8
+COPY_EXISTING ~famimp.cre~ ~override~
+WRITE_ASCII 0x248 ~Y5SUM~ #8
+COPY_EXISTING ~famimp25.cre~ ~override~
+WRITE_ASCII 0x248 ~Y5SUM~ #8
+
+COPY_EXISTING ~famfer_.cre~ ~override~
+WRITE_ASCII 0x248 ~Y5SUM~ #8
+COPY_EXISTING ~famfer.cre~ ~override~
+WRITE_ASCII 0x248 ~Y5SUM~ #8
+COPY_EXISTING ~famfer25.cre~ ~override~
+WRITE_ASCII 0x248 ~Y5SUM~ #8
+
+COPY_EXISTING ~famcat_.cre~ ~override~
+WRITE_ASCII 0x248 ~Y5SUM~ #8
+COPY_EXISTING ~famcat.cre~ ~override~
+WRITE_ASCII 0x248 ~Y5SUM~ #8
+COPY_EXISTING ~famcat25.cre~ ~override~
+WRITE_ASCII 0x248 ~Y5SUM~ #8
+
+COPY_EXISTING ~famdust_.cre~ ~override~
+WRITE_ASCII 0x248 ~Y5SUM~ #8
+COPY_EXISTING ~famdust.cre~ ~override~
+WRITE_ASCII 0x248 ~Y5SUM~ #8
+COPY_EXISTING ~famdus25.cre~ ~override~
+WRITE_ASCII 0x248 ~Y5SUM~ #8
+
+COPY_EXISTING ~famfair_.cre~ ~override~
+WRITE_ASCII 0x248 ~Y5SUM~ #8
+COPY_EXISTING ~famfair.cre~ ~override~
+WRITE_ASCII 0x248 ~Y5SUM~ #8
+COPY_EXISTING ~famfai25.cre~ ~override~
+WRITE_ASCII 0x248 ~Y5SUM~ #8
+
+<<<<<<<< .../Y5ESUM.baf
+IF
+	HotKey(T)
+	Global("gh_AIOffSwitch","LOCALS",1)
+THEN
+	RESPONSE #100
+		SetGlobal("gh_AIOffSwitch","LOCALS",0)
+		SmallWait(1)
+		DisplayStringHead(Myself,%AI active%)
+END
+
+IF
+	HotKey(T)
+	Global("gh_AIOffSwitch","LOCALS",0)
+THEN
+	RESPONSE #100
+		SetGlobal("gh_AIOffSwitch","LOCALS",1)
+		SmallWait(1)
+		DisplayStringHead(Myself,%AI inactive%)
+END
+>>>>>>>>
+
+	EXTEND_TOP ~Y5SUM.bcs~ ~...Y5ESUM.baf~ EVAL
+
+END
+
+/////////////////////////////////////////
+///////////////////////////////BEGIN EET FAMILIARS
+/////////////////////////////////////////
+
+BEGIN ~Familiars (EET)~
+DESIGNATED 515
+REQUIRE_PREDICATE DIRECTORY_EXISTS ~./EET/backup~ ~Requires EET~
+
+//COPY_EXISTING ~K#FAMKIL.BCS~ ~override~
+//	DECOMPILE_AND_PATCH BEGIN
+//		REPLACE_TEXTUALLY ~ActionOverride(Player1,DisplayString(Myself,21004))~ ~~
+//		REPLACE_TEXTUALLY ~ChangeStat(Player1,CON,-1,ADD)~ ~ActionOverride(Player1,ForceSpellRES("K#FAMCON",Myself))~
+//	END
+//BUT_ONLY
+
+COPY ~misc_ex/familiar~ ~override~
+COPY_EXISTING ~K#FAMCON.spl~ ~override~
+	LPF CLONE_EFFECT INT_VAR match_opcode = 10 opcode = 12 parameter2 = 3 parameter1 = 40 timing = 1 duration = 0 END
+	LPF CLONE_EFFECT INT_VAR match_opcode = 10 opcode = 139 parameter1 = 8536 timing = 1 duration = 0 END
+	LPF DELETE_EFFECT INT_VAR match_opcode = 10 END
